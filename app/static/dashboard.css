@@ -1247,6 +1247,97 @@ textarea.dec-comment {
   color: var(--ink);
 }
 
+/* Upload Tab Styles */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.upload-dropzone {
+  background: #ffffff;
+  border: 2px dashed #94A3B8;
+  border-radius: 14px;
+  padding: 36px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(10,25,47,0.03);
+}
+.upload-dropzone:hover, .upload-dropzone.dragover {
+  border-color: var(--accent);
+  background: #F0FDF4;
+  box-shadow: 0 6px 20px rgba(10,25,47,0.08);
+}
+.upload-dropzone-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #EEF2F6;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.upload-samples-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.upload-sample-btn {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-family: var(--font-gov-mono);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.upload-sample-btn:hover {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+.upload-result-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 16px rgba(10,25,47,0.04);
+}
+.upload-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.upload-meta-item {
+  background: var(--surface-2);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.upload-meta-lbl {
+  font-size: 10px;
+  font-family: var(--font-gov-mono);
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+}
+.upload-meta-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
 /* Toast */
 .toast {
   position: fixed;

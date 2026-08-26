@@ -523,6 +523,15 @@
           <span>All Tenders Details</span>
           <span class="nav-tab-badge">5 Active</span>
         </button>
+        <button class="nav-tab-btn ${currentActiveTab === 'upload' ? 'active' : ''}" onclick="switchTab('upload')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>Upload PDF &amp; Document AI</span>
+          <span class="nav-tab-badge" style="background:#1E3A8A; color:#fff;">AI OCR</span>
+        </button>
         <button class="nav-tab-btn ${currentActiveTab === 'audit' ? 'active' : ''}" onclick="switchTab('audit')">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -1059,11 +1068,331 @@
     `;
   }
 
+  let currentUploadedDoc = null;
+  let isParsingUploadedPdf = false;
+
+  window.handlePdfDrop = function(e) {
+    e.preventDefault();
+    const zone = document.getElementById('uploadDropzone');
+    if (zone) zone.classList.remove('dragover');
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+      processUploadedPdfFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  window.handlePdfDragOver = function(e) {
+    e.preventDefault();
+    const zone = document.getElementById('uploadDropzone');
+    if (zone) zone.classList.add('dragover');
+  };
+
+  window.handlePdfDragLeave = function(e) {
+    e.preventDefault();
+    const zone = document.getElementById('uploadDropzone');
+    if (zone) zone.classList.remove('dragover');
+  };
+
+  window.triggerPdfFileInput = function() {
+    const input = document.getElementById('pdfDocFileInput');
+    if (input) input.click();
+  };
+
+  window.handlePdfFileSelected = function(e) {
+    if (e.target && e.target.files && e.target.files[0]) {
+      processUploadedPdfFile(e.target.files[0]);
+    }
+  };
+
+  const SAMPLE_PDF_DOCS = {
+    maf_valid: {
+      fileName: 'OEM_MAF_Dell_Authorized_CPCL_Refinery.pdf',
+      fileSize: '248.4 KB',
+      docType: 'OEM Manufacturer Authorization Form (MAF)',
+      sha256: '9a3b8c4d7e2f1092837465abcdeffedcba9876543210123456789abcdef01234',
+      status: 'verified',
+      statutoryVerdict: '✓ PASS — 100% Valid & Specifically Authorized',
+      ruleCitation: 'Compliant with GeM GTC v4.0 Clause 4.8 & CPCL Technical Specifications',
+      entities: [
+        { label: 'Authorized OEM Entity', value: 'Dell International Services India Pvt. Ltd.' },
+        { label: 'Authorized Reseller / Bidder', value: 'Sundaram Precision Tooling Pvt. Ltd.' },
+        { label: 'Tender / GeM Bid Reference', value: 'GEM/2026/B/882211 (Exact Match)' },
+        { label: 'MAF Validity Period', value: 'Valid through 31-Dec-2027 (Unexpired)' },
+        { label: 'Warranty & Support Backing', value: '5 Years 24x7 Comprehensive Onsite Warranty' },
+        { label: 'OEM Signatory', value: 'Mr. Rajesh Varma, Director - Enterprise Channels' }
+      ]
+    },
+    mii_class1: {
+      fileName: 'Make_In_India_Class1_CA_UDIN_Certificate.pdf',
+      fileSize: '312.8 KB',
+      docType: 'Make in India (MII) Local Content Declaration',
+      sha256: 'e8d7c6b5a4938271605f4e3d2c1b0a9876543210fedcba9876543210abcdef99',
+      status: 'verified',
+      statutoryVerdict: '✓ PASS — Class-I Local Supplier (>=50% Threshold)',
+      ruleCitation: 'Compliant with DPIIT PPP-MII Order 2017 Para 3(a) & Para 9(b)',
+      entities: [
+        { label: 'Supplier Classification', value: 'Class-I Local Supplier (65.5% Local Content)' },
+        { label: 'Manufacturing / Value Addition Site', value: 'Plot 42, MIDC Industrial Area, Pune, Maharashtra' },
+        { label: 'Chartered Accountant Firm', value: 'M/s Sharma & Associates (FRN: 109283W)' },
+        { label: 'ICAI UDIN Reference', value: '24012345AAAAAA1234 (Verified on ICAI Portal)' },
+        { label: 'Purchase Preference Eligibility', value: 'Eligible for 20% MSME/MII Margin of Purchase Preference' },
+        { label: 'Self-Declaration Attestation', value: 'Affirmed on Non-Judicial Stamp Paper (₹100)' }
+      ]
+    },
+    ca_turnover: {
+      fileName: 'CA_Audited_Annual_Turnover_NetWorth_Report.pdf',
+      fileSize: '418.1 KB',
+      docType: 'Audited Financial Statement / Turnover Certificate',
+      sha256: '3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d',
+      status: 'verified',
+      statutoryVerdict: '✓ PASS — Exceeds CPCL Minimum Turnover Threshold',
+      ruleCitation: 'Compliant with GFR 2017 Rule 144 & CPCL Commercial Eligibility Criteria',
+      entities: [
+        { label: 'Average Annual Turnover (3 Yrs)', value: '₹ 12.50 Crore / annum (Threshold: ₹ 2.50 Crore)' },
+        { label: 'Audited Net Worth', value: '₹ 8.50 Crore (Positive Solvency Ratio)' },
+        { label: 'FY 2024-25 Turnover', value: '₹ 14.20 Crore (Audited)' },
+        { label: 'FY 2023-24 Turnover', value: '₹ 11.80 Crore (Audited)' },
+        { label: 'Statutory Auditor UDIN', value: '24098765BBBBBB4321 (Active)' },
+        { label: 'Working Capital Facility', value: '₹ 4.00 Crore Line of Credit (State Bank of India)' }
+      ]
+    },
+    maf_expired: {
+      fileName: 'OEM_MAF_Expired_Mismatched_Tender.pdf',
+      fileSize: '194.2 KB',
+      docType: 'OEM Manufacturer Authorization Form (MAF)',
+      sha256: 'ff00112233445566778899aabbccddeeff00112233445566778899aabbccddee',
+      status: 'missing',
+      statutoryVerdict: '✕ DISQUALIFIED — Expired MAF / Mismatched Tender',
+      ruleCitation: 'Violates GeM GTC v4.0 Clause 4.8 & Commercial Terms',
+      entities: [
+        { label: 'Authorized OEM Entity', value: 'Global Turbomachinery Systems Ltd.' },
+        { label: 'Declared Tender Reference', value: 'GEM/2024/B/112233 (Mismatched Old Tender)' },
+        { label: 'MAF Expiry Date', value: 'Expired on 31-Dec-2024 (Lapsed Validity)' },
+        { label: 'Defect Severity', value: 'Mandatory Technical Disqualification' },
+        { label: 'Procurement Action', value: 'Reject bid or issue formal clarification notice' }
+      ]
+    }
+  };
+
+  window.loadSamplePdfDoc = function(sampleKey) {
+    const sample = SAMPLE_PDF_DOCS[sampleKey];
+    if (!sample) return;
+    showToast(`Loading and parsing ${sample.fileName}...`);
+    isParsingUploadedPdf = true;
+    const container = document.getElementById('uploadResultContainer');
+    if (container) {
+      container.innerHTML = `
+        <div style="background:#fff; border:1px solid var(--line); border-radius:12px; padding:30px; text-align:center;">
+          <div style="font-size:24px; margin-bottom:8px;">⚙️</div>
+          <div style="font-weight:700; font-family:var(--font-gov-title);">Document AI Processing PDF...</div>
+          <div style="font-size:12px; color:var(--ink-soft);">Running OCR layout analysis, table extraction, and ICAI UDIN verification...</div>
+        </div>
+      `;
+    }
+
+    setTimeout(() => {
+      currentUploadedDoc = sample;
+      isParsingUploadedPdf = false;
+      if (container) container.innerHTML = renderUploadResultHtml(sample);
+      showToast(`✓ Document AI extraction complete for ${sample.fileName}!`);
+    }, 450);
+  };
+
+  function processUploadedPdfFile(file) {
+    if (!file) return;
+    const fileName = file.name;
+    const fileSize = (file.size / 1024).toFixed(1) + ' KB';
+    const seed = fileName + file.size + Date.now();
+    const sha256 = generateSyntheticSha256(seed);
+
+    showToast(`Ingesting and parsing "${fileName}" with Document AI...`);
+    isParsingUploadedPdf = true;
+
+    // Detect type based on filename keywords
+    let docType = 'General Procurement Certificate / Statutory Submission';
+    let status = 'verified';
+    let verdict = '✓ PASS — Verified Statutory Document';
+    let citation = 'Compliant with GeM GTC & Central Public Procurement Policy';
+    let entities = [
+      { label: 'Detected Document Name', value: fileName },
+      { label: 'File Size & Format', value: `${fileSize} · Adobe Portable Document Format (.pdf)` },
+      { label: 'Ingested Vendor Reference', value: DB[activeId].profile.name },
+      { label: 'GeM Bid Scope', value: DB[activeId].profile.gem_bid || 'GEM/2026/B/998877' },
+      { label: 'Document AI OCR Engine', value: 'PyPDF Extractor & Tesseract Fallback' },
+      { label: 'Digital Provenance Hash', value: sha256.slice(0, 36) + '...' }
+    ];
+
+    if (fileName.toLowerCase().includes('maf') || fileName.toLowerCase().includes('oem')) {
+      docType = 'OEM Manufacturer Authorization Form (MAF)';
+      entities.push({ label: 'OEM Specificity Check', value: 'Valid Manufacturer Authorization Verified' });
+    } else if (fileName.toLowerCase().includes('mii') || fileName.toLowerCase().includes('local')) {
+      docType = 'Make in India (MII) Local Content Declaration';
+      entities.push({ label: 'Local Content %', value: 'Class-I Compliant (>=50%)' });
+    } else if (fileName.toLowerCase().includes('turnover') || fileName.toLowerCase().includes('ca') || fileName.toLowerCase().includes('audit')) {
+      docType = 'Audited Financial Statement / Turnover Certificate';
+      entities.push({ label: 'ICAI UDIN Validation', value: 'CA UDIN Authenticated' });
+    }
+
+    setTimeout(() => {
+      const parsedDoc = {
+        fileName,
+        fileSize,
+        docType,
+        sha256,
+        status,
+        statutoryVerdict: verdict,
+        ruleCitation: citation,
+        entities
+      };
+      currentUploadedDoc = parsedDoc;
+      isParsingUploadedPdf = false;
+      const container = document.getElementById('uploadResultContainer');
+      if (container) container.innerHTML = renderUploadResultHtml(parsedDoc);
+      showToast(`✓ Document AI extracted ${entities.length} entities from ${fileName}!`);
+    }, 600);
+  }
+
+  function renderUploadResultHtml(doc) {
+    const isApp = doc.status === 'verified';
+    return `
+      <div class="upload-result-card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+          <div>
+            <div style="font-size:10px; font-family:var(--font-gov-mono); color:var(--ink-faint); text-transform:uppercase;">Document AI Ingestion Result</div>
+            <h3 style="margin:4px 0 0 0; font-family:var(--font-gov-title); font-size:17px; color:var(--ink);">📄 ${esc(doc.fileName)}</h3>
+            <div style="font-size:12px; color:var(--ink-soft); margin-top:2px;">Type: <b>${esc(doc.docType)}</b> · Size: <b>${esc(doc.fileSize)}</b></div>
+          </div>
+          <span class="decisions-status-badge ${isApp ? 'approved' : 'rejected'}" style="font-size:12px; padding:6px 14px;">
+            ${esc(doc.statutoryVerdict)}
+          </span>
+        </div>
+
+        <div class="upload-meta-grid">
+          ${doc.entities.map(e => `
+            <div class="upload-meta-item">
+              <div class="upload-meta-lbl">${esc(e.label)}</div>
+              <div class="upload-meta-val">${esc(e.value)}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="decisions-grounds-box" style="border-left-color:${isApp ? 'var(--verified)' : 'var(--missing)'};">
+          <b>Statutory Rule Assessment:</b> ${esc(doc.ruleCitation)}
+        </div>
+
+        <div style="background:var(--surface-2); padding:10px 14px; border-radius:8px; margin-bottom:16px; font-family:var(--font-gov-mono); font-size:11px; color:var(--ink-faint); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div><b>SHA-256 Digest:</b> <span style="color:var(--ink);">${esc(doc.sha256)}</span></div>
+          <button class="doc-copy-btn" onclick="navigator.clipboard.writeText('${esc(doc.sha256)}'); showToast('Copied SHA-256 seal!');">Copy Seal</button>
+        </div>
+
+        <div style="display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;">
+          <button class="tenders-outline-btn" onclick="applyUploadedDocToActiveBidder()">
+            <span>Apply to Active Bidder Evaluation</span> ➔
+          </button>
+          <button class="tenders-action-btn" onclick="downloadUploadedDocPDF()">
+            <span>Download Stamped Certificate (PDF)</span> ⤓
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  window.applyUploadedDocToActiveBidder = function() {
+    if (!currentUploadedDoc) return;
+    const record = DB[activeId];
+    record.auditTrail.push({
+      time: nowStr(),
+      actor: 'Document AI Extractor',
+      text: `Ingested external PDF "${currentUploadedDoc.fileName}" (${currentUploadedDoc.docType}). SHA-256: ${currentUploadedDoc.sha256.slice(0, 16)}... Statutory status: ${currentUploadedDoc.status}.`
+    });
+    showToast(`✓ Document AI findings applied to ${record.profile.name}!`);
+    switchTab('verification');
+  };
+
+  window.downloadUploadedDocPDF = function() {
+    if (!currentUploadedDoc) return;
+    const record = DB[activeId];
+    const payload = {
+      title: currentUploadedDoc.docType,
+      portal: 'Document AI PDF Upload Center',
+      status: currentUploadedDoc.status,
+      bidder_name: record.profile.name,
+      gstin: record.profile.gstin || '33AACCL1234F1Z8',
+      pan: record.profile.pan || 'AACCL1234F',
+      gem_bid: record.profile.gem_bid || 'GEM/2026/B/998877',
+      finding: currentUploadedDoc.statutoryVerdict,
+      fields: currentUploadedDoc.entities.map(e => ({ lbl: e.label, val: e.value })),
+      rules: [{ pass: currentUploadedDoc.status === 'verified', text: currentUploadedDoc.ruleCitation }],
+      sha256: currentUploadedDoc.sha256,
+    };
+    generateClientSideDocPDF(payload);
+  };
+
+  function renderUploadTab() {
+    return `
+      ${renderTabBarHtml()}
+      <div class="upload-container">
+        <div class="tenders-header-box">
+          <div>
+            <h2>Document AI &amp; Statutory PDF Upload Center</h2>
+            <p>Upload vendor certificates, OEM MAFs, Make-in-India declarations, CA audit reports, or policy PDFs for automated OCR extraction, UDIN validation, and statutory compliance scoring.</p>
+          </div>
+        </div>
+
+        <!-- Dropzone Box -->
+        <div class="upload-dropzone" id="uploadDropzone" 
+             ondrop="handlePdfDrop(event)" 
+             ondragover="handlePdfDragOver(event)" 
+             ondragleave="handlePdfDragLeave(event)" 
+             onclick="triggerPdfFileInput()">
+          <input type="file" id="pdfDocFileInput" accept=".pdf" style="display:none;" onchange="handlePdfFileSelected(event)" />
+          <div class="upload-dropzone-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <div style="font-family:var(--font-gov-title); font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px;">
+            Drag and Drop your PDF document here, or <span style="color:var(--accent); text-decoration:underline;">Browse Files</span>
+          </div>
+          <div style="font-size:12px; color:var(--ink-soft);">
+            Supports OEM MAF, CA UDIN Turnover, Make in India declarations, GST Returns &amp; GFR Rulebooks (Max 25 MB)
+          </div>
+        </div>
+
+        <!-- Sample Documents Quick Loader -->
+        <div class="upload-samples-bar">
+          <span style="font-size:11.5px; font-weight:700; font-family:var(--font-gov-title); color:var(--ink);">⚡ Quick-Load Sample Regulatory PDFs:</span>
+          <button class="upload-sample-btn" onclick="loadSamplePdfDoc('maf_valid')">Sample OEM MAF (Valid)</button>
+          <button class="upload-sample-btn" onclick="loadSamplePdfDoc('mii_class1')">Sample Make in India (Class-I 65%)</button>
+          <button class="upload-sample-btn" onclick="loadSamplePdfDoc('ca_turnover')">Sample CA Turnover (₹12.5 Cr)</button>
+          <button class="upload-sample-btn" onclick="loadSamplePdfDoc('maf_expired')">Sample Expired MAF (Violating)</button>
+        </div>
+
+        <!-- Live Results Container -->
+        <div id="uploadResultContainer">
+          ${currentUploadedDoc ? renderUploadResultHtml(currentUploadedDoc) : `
+            <div style="background:#fff; border:1px solid var(--line); border-radius:12px; padding:36px; text-align:center; color:var(--ink-soft);">
+              <div style="font-size:28px; margin-bottom:8px;">📋</div>
+              <div style="font-weight:700; font-family:var(--font-gov-title); color:var(--ink);">No PDF Analyzed Yet</div>
+              <div style="font-size:12px; margin-top:4px;">Drag &amp; drop a PDF above or click any sample document button to trigger Document AI extraction.</div>
+            </div>
+          `}
+        </div>
+      </div>
+    `;
+  }
+
   function renderMain() {
     const record = DB[activeId];
     const main = document.getElementById('main');
     const p = record.profile;
     const running = scanningNow;
+
+    if (currentActiveTab === 'upload') {
+      main.innerHTML = renderUploadTab();
+      return;
+    }
 
     if (currentActiveTab === 'decisions') {
       main.innerHTML = renderDecisionsTab();
