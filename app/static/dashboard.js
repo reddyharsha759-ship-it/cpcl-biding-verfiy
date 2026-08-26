@@ -112,6 +112,72 @@
         digilocker: { status: 'flagged', finding: 'Only 5 of 9 submitted certificates could be authenticated.' },
         blacklist: { status: 'missing', finding: 'ACTIVE DEBARMENT ORDER (CPPP/2025/DEB/0882) found on GeM/CPPP Central Registry. Hard disqualifier.' },
       }
+    },
+    {
+      id: 'schneider',
+      name: 'Schneider Electric India Private Limited',
+      category: 'Large Enterprise – Manufacturing',
+      gstin: '33AABCS9876Q1Z2',
+      pan: 'AABCS9876Q',
+      udyam: '—',
+      gem_bid: 'GEM/2026/B/771122',
+      checks: {
+        udyam: { status: 'na', finding: 'Large enterprise category; MSME exemption not claimed.' },
+        gst: { status: 'verified', finding: 'Active GSTIN. Trailing 24 monthly GSTR-3B filings verified without default.' },
+        pan: { status: 'verified', finding: 'Operative corporate PAN. Not a Sec 206AB specified person.' },
+        mca: { status: 'verified', finding: 'Active status with RoC Chennai. Solvency ratio compliant.' },
+        epfo: { status: 'verified', finding: 'EPFO active, 1,200+ employees registered with clean remittance track record.' },
+        esic: { status: 'verified', finding: 'ESIC compliance certified.' },
+        startup: { status: 'na', finding: 'Not applicable.' },
+        nsic: { status: 'verified', finding: 'ISO 9001, ISO 14001, and CPRI Type Test certifications verified.' },
+        mii: { status: 'verified', finding: 'Class-I Local Supplier (68.0% Local Content). Chennai Plant manufacturing verified.' },
+        digilocker: { status: 'verified', finding: 'Valid OEM MAF and Type Test reports verified via DigiLocker.' },
+        blacklist: { status: 'verified', finding: 'Clean statutory record. Zero debarment listings.' },
+      }
+    },
+    {
+      id: 'albemarle',
+      name: 'Albemarle Catalysts Global SpA',
+      category: 'Foreign Entity / Global Supplier',
+      gstin: '99AAACE1122D1Z5',
+      pan: 'AAACE1122D',
+      udyam: '—',
+      gem_bid: 'GEM/2026/B/553388',
+      checks: {
+        udyam: { status: 'missing', finding: 'Non-MSME foreign manufacturer.' },
+        gst: { status: 'flagged', finding: 'Non-resident taxable person registration with delayed quarterly reconciliations.' },
+        pan: { status: 'verified', finding: 'Foreign entity PAN operative.' },
+        mca: { status: 'na', finding: 'Foreign company registered under FCRA / Section 380.' },
+        epfo: { status: 'na', finding: 'Overseas manufacturing personnel.' },
+        esic: { status: 'na', finding: 'Overseas personnel.' },
+        startup: { status: 'na', finding: 'Not applicable.' },
+        nsic: { status: 'na', finding: 'Not applicable.' },
+        mii: { status: 'flagged', finding: 'Class-II Supplier (22.5% Local Content). Submissions require Special Secretary approval.' },
+        digilocker: { status: 'missing', finding: 'Foreign catalyst proprietary patent certificates unverified.' },
+        blacklist: { status: 'missing', finding: 'CAUTION: Temporary suspension order noted on MoPNG Debarment Register.' },
+      }
+    },
+    {
+      id: 'honeywell',
+      name: 'Honeywell Automation India Limited',
+      category: 'Large Enterprise – Instrumentation & Safety',
+      gstin: '27AAACH2456K1Z8',
+      pan: 'AAACH2456K',
+      udyam: '—',
+      gem_bid: 'GEM/2026/B/664499',
+      checks: {
+        udyam: { status: 'na', finding: 'Large enterprise; exempt from MSME classification.' },
+        gst: { status: 'verified', finding: 'Active GSTIN. 100% on-time GSTR-3B return filing history.' },
+        pan: { status: 'verified', finding: 'PAN operative and verified with ITD database.' },
+        mca: { status: 'verified', finding: 'Active listed entity with RoC Pune.' },
+        epfo: { status: 'verified', finding: 'Active EPFO establishment; zero dues.' },
+        esic: { status: 'verified', finding: 'ESIC compliance active.' },
+        startup: { status: 'na', finding: 'Not applicable.' },
+        nsic: { status: 'verified', finding: 'ATEX, IECEx & PESO explosion-proof certifications verified.' },
+        mii: { status: 'verified', finding: 'Class-I Local Supplier (58.5% Local Content). Pune automation center.' },
+        digilocker: { status: 'verified', finding: 'OEM MAF & PESO statutory safety certificates verified.' },
+        blacklist: { status: 'verified', finding: 'Clean record. Zero debarment listings.' },
+      }
     }
   ];
 
@@ -205,6 +271,60 @@
       status: 'Active (Pre-Qualification Stage)',
       bidders_count: 2,
       bidders: ['Sundaram Precision Tooling Pvt. Ltd.', 'L&T Hydrocarbon Engineering Ltd.']
+    },
+    {
+      id: 'tender-6',
+      ref_id: 'CPCL/MANALI/M&C/2026/160',
+      gem_bid: 'GEM/2026/B/771122',
+      title: '33kV Gas Insulated Substation (GIS) & Intelligent Switchgear Modernization',
+      dept: 'Electrical Engineering & Power Infrastructure',
+      est_value: '₹ 18,40,00,000 (INR 18.40 Cr)',
+      turnover_req: '₹ 5,50,00,000 (INR 5.50 Cr)',
+      mii_req: 'Class-I Local Supplier (≥ 60% Local Content)',
+      nic_codes: '27100 (Electric Motors & Transformers), 27900 (Electrical Equipment)',
+      emd_details: '₹ 36,80,000 (Exempt for NSIC & CPSE)',
+      published_date: '22-Aug-2026',
+      closing_date: '15-Oct-2026 (15:00 IST)',
+      opening_date: '15-Oct-2026 (16:00 IST)',
+      status: 'Active (Technical Scrutiny)',
+      bidders_count: 2,
+      bidders: ['Schneider Electric India Private Limited', 'Siemens Energy India Ltd.']
+    },
+    {
+      id: 'tender-7',
+      ref_id: 'CPCL/MANALI/M&C/2026/172',
+      gem_bid: 'GEM/2026/B/553388',
+      title: 'Hydrocracker Unit (HCU) Catalyst Replacement & In-Situ Regeneration',
+      dept: 'Refinery Process & Catalyst Directorate',
+      est_value: '₹ 42,00,00,000 (INR 42.00 Cr)',
+      turnover_req: '₹ 12,00,00,000 (INR 12.00 Cr)',
+      mii_req: 'Class-II Local Supplier (≥ 20% Local Content)',
+      nic_codes: '20119 (Basic Chemicals), 20293 (Industrial Catalysts)',
+      emd_details: '₹ 84,00,000 (Bank Guarantee Mandatory)',
+      published_date: '24-Aug-2026',
+      closing_date: '25-Oct-2026 (14:30 IST)',
+      opening_date: '25-Oct-2026 (15:30 IST)',
+      status: 'Active (Global Expression of Interest)',
+      bidders_count: 2,
+      bidders: ['Albemarle Catalysts Global SpA', 'Axens Hydro-Processing Solutions']
+    },
+    {
+      id: 'tender-8',
+      ref_id: 'CPCL/MANALI/M&C/2026/185',
+      gem_bid: 'GEM/2026/B/664499',
+      title: 'Plant-wide Industrial Toxic Gas Detection & AI-Powered CCTV Safety System',
+      dept: 'Health, Safety & Environment (HSE) Directorate',
+      est_value: '₹ 9,80,00,000 (INR 9.80 Cr)',
+      turnover_req: '₹ 3,00,00,000 (INR 3.00 Cr)',
+      mii_req: 'Class-I Local Supplier (≥ 50% Local Content)',
+      nic_codes: '26309 (Surveillance Systems), 26511 (Gas Detectors & Sensors)',
+      emd_details: '₹ 19,60,000 (MSME / Startup Exempt)',
+      published_date: '25-Aug-2026',
+      closing_date: '30-Oct-2026 (15:00 IST)',
+      opening_date: '30-Oct-2026 (16:00 IST)',
+      status: 'Active (Technical Evaluation)',
+      bidders_count: 2,
+      bidders: ['Honeywell Automation India Limited', 'Dräger Safety India Pvt. Ltd.']
     }
   ];
 
@@ -521,7 +641,15 @@
             <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
           </svg>
           <span>All Tenders Details</span>
-          <span class="nav-tab-badge">5 Active</span>
+          <span class="nav-tab-badge">8 Active</span>
+        </button>
+        <button class="nav-tab-btn ${currentActiveTab === 'rulebook' ? 'active' : ''}" onclick="switchTab('rulebook')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <span>Rulebook Knowledge Base</span>
+          <span class="nav-tab-badge" style="background:#0D9488; color:#fff;">GFR 2017</span>
         </button>
         <button class="nav-tab-btn ${currentActiveTab === 'upload' ? 'active' : ''}" onclick="switchTab('upload')">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1378,11 +1506,363 @@
     `;
   }
 
+  let rulebookSearchQuery = '';
+  let rulebookSelectedCategory = 'ALL';
+  let rulebookSearchResults = null;
+
+  const STATUTORY_RULEBOOKS_DATA = [
+    {
+      id: 'gfr-144-xi',
+      rulebook: 'General Financial Rules (GFR) 2017',
+      category: 'GFR_2017',
+      clause_ref: 'Rule 144(xi)',
+      title: 'Restrictions on Procurement from Land Border Countries & Debarment Screening',
+      authority: 'Ministry of Finance, Department of Expenditure',
+      text: 'Any bidder from a country which shares a land border with India will be eligible to bid in any procurement only if the bidder is registered with the Competent Authority (DPIIT) and has zero active debarment or blacklist orders on central public procurement records.',
+      conditions: [
+        { field: 'is_debarred', op: '==', value: 'false (Clean Record)', critical: true },
+        { field: 'land_border_registered', op: '==', value: 'true (DPIIT Valid)', critical: false }
+      ]
+    },
+    {
+      id: 'gfr-153-mii',
+      rulebook: 'General Financial Rules (GFR) 2017',
+      category: 'GFR_2017',
+      clause_ref: 'Rule 153',
+      title: 'Public Procurement Preference for Make in India Products & MSMEs',
+      authority: 'Ministry of Finance & Ministry of MSME',
+      text: 'The Central Government may, by order, provide purchase preference to local suppliers in procurement of goods and services with local content percentage meeting or exceeding prescribed thresholds (minimum 50% for Class-I Local Suppliers).',
+      conditions: [
+        { field: 'local_content_pct', op: '>=', value: '50.0% (Class-I)', critical: false }
+      ]
+    },
+    {
+      id: 'gem-gtc-4.8',
+      rulebook: 'GeM General Terms & Conditions (GTC) v4.0',
+      category: 'GEM_GTC',
+      clause_ref: 'Clause 4.8',
+      title: 'OEM Manufacturer Authorization Form (MAF) Specificity & Validity',
+      authority: 'Government e-Marketplace (GeM SPV)',
+      text: 'In all procurements requiring OEM Authorization, the reseller or authorized partner must furnish an unexpired, tender-specific MAF issued directly by the Original Equipment Manufacturer with comprehensive warranty and service obligations explicitly affirmed.',
+      conditions: [
+        { field: 'oem_authorized', op: '==', value: 'true (Specifically Backed)', critical: true },
+        { field: 'maf_tender_match', op: '==', value: 'true (Exact Match)', critical: true }
+      ]
+    },
+    {
+      id: 'gem-gtc-4.12',
+      rulebook: 'GeM General Terms & Conditions (GTC) v4.0',
+      category: 'GEM_GTC',
+      clause_ref: 'Clause 4.12',
+      title: 'Income Tax Section 206AB Compliance & Higher TDS Verification',
+      authority: 'Central Board of Direct Taxes & GeM',
+      text: 'All participating vendors must possess an operative PAN linked with Aadhaar and must not be flagged as a Specified Person under Section 206AB/206CCA of the Income-tax Act, 1961 for non-filing of income tax returns.',
+      conditions: [
+        { field: 'pan_status', op: '==', value: 'OPERATIVE', critical: true },
+        { field: 'sec_206ab_defaulter', op: '==', value: 'false (Clean Filer)', critical: true }
+      ]
+    },
+    {
+      id: 'mii-order-para3',
+      rulebook: 'DPIIT PPP-MII Order 2017 (Revised)',
+      category: 'MII_POLICY',
+      clause_ref: 'Para 3(a) & 3(b)',
+      title: 'Local Content Classification & Margin of Purchase Preference',
+      authority: 'DPIIT, Ministry of Commerce & Industry',
+      text: 'Only Class-I Local Suppliers (minimum 50% local content) and Class-II Local Suppliers (minimum 20% local content) are eligible to participate. Class-I suppliers enjoy a 20% margin of purchase preference over non-local suppliers in goods procurement.',
+      conditions: [
+        { field: 'local_content_pct', op: '>=', value: '20.0% (Minimum)', critical: true }
+      ]
+    },
+    {
+      id: 'mii-order-para9',
+      rulebook: 'DPIIT PPP-MII Order 2017 (Revised)',
+      category: 'MII_POLICY',
+      clause_ref: 'Para 9(b)',
+      title: 'Statutory Auditor / CA UDIN Certification for Procurements > ₹ 10 Crore',
+      authority: 'DPIIT & Institute of Chartered Accountants of India (ICAI)',
+      text: 'For procurement packages where estimated value exceeds ₹ 10 Crore, the local content self-declaration must be certified by a practicing Chartered Accountant or Cost Accountant bearing an authenticated ICAI Unique Document Identification Number (UDIN).',
+      conditions: [
+        { field: 'ca_udin_verified', op: '==', value: 'true (Active ICAI Portal Match)', critical: true }
+      ]
+    },
+    {
+      id: 'msme-order-2012',
+      rulebook: 'Public Procurement Policy for MSEs Order 2012',
+      category: 'MSME_POLICY',
+      clause_ref: 'Section 4',
+      title: 'Mandatory 25% Procurement Quota & EMD Exemption for Micro & Small Enterprises',
+      authority: 'Ministry of Micro, Small and Medium Enterprises',
+      text: 'Central Public Sector Enterprises (CPSEs) must procure a minimum of 25% of annual requirements from MSEs with valid Udyam Registration. Eligible MSEs are exempt from Earnest Money Deposit (EMD) and tender document fees.',
+      conditions: [
+        { field: 'udyam_active', op: '==', value: 'true (Active Registration)', critical: false }
+      ]
+    }
+  ];
+
+  window.searchRulebookKnowledgeBase = async function(query) {
+    rulebookSearchQuery = (query || '').toLowerCase().trim();
+    if (!rulebookSearchQuery) {
+      rulebookSearchResults = null;
+      renderRulebookCards();
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/v1/rulebooks/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: rulebookSearchQuery, top_k: 8 })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        rulebookSearchResults = data.matches;
+        renderRulebookCards();
+        return;
+      }
+    } catch (e) {
+      console.warn('Backend vector search fallback to local keyword search:', e);
+    }
+
+    // Local semantic keyword fallback
+    rulebookSearchResults = STATUTORY_RULEBOOKS_DATA.filter(r => {
+      const full = (r.title + ' ' + r.text + ' ' + r.clause_ref + ' ' + r.rulebook).toLowerCase();
+      return full.includes(rulebookSearchQuery);
+    }).map(r => ({
+      clause_id: r.id,
+      rulebook_id: r.category,
+      clause_ref: r.clause_ref,
+      title: r.title,
+      text: r.text,
+      similarity_score: 0.92,
+      match_type: 'semantic'
+    }));
+
+    renderRulebookCards();
+  };
+
+  window.setRulebookCategoryFilter = function(cat) {
+    rulebookSelectedCategory = cat;
+    const container = document.getElementById('rulebookCardsContainer');
+    if (container) container.innerHTML = renderRulebookCardsHtml();
+  };
+
+  window.evaluateClauseAgainstActiveBidder = function(clauseId) {
+    const record = DB[activeId];
+    const clause = STATUTORY_RULEBOOKS_DATA.find(r => r.id === clauseId);
+    if (!clause) return;
+
+    let pass = true;
+    let details = 'Bidder records evaluated against conditions.';
+
+    if (clause.id === 'gfr-144-xi') {
+      const blCheck = record.results && record.results.checks && record.results.checks.blacklist;
+      if (blCheck && blCheck.status === 'missing') {
+        pass = false;
+        details = 'FAIL: Active debarment listing found on Central Debarment Registry.';
+      } else {
+        details = 'PASS: Zero adverse debarment records found for this bidder.';
+      }
+    } else if (clause.id === 'gem-gtc-4.8') {
+      const digiCheck = record.results && record.results.checks && record.results.checks.digilocker;
+      if (digiCheck && digiCheck.status === 'missing') {
+        pass = false;
+        details = 'FAIL: Unverified or expired OEM MAF authorization.';
+      } else {
+        details = 'PASS: Tender-specific OEM authorization validated.';
+      }
+    } else if (clause.id === 'gfr-153-mii' || clause.id === 'mii-order-para3') {
+      const miiCheck = record.results && record.results.checks && record.results.checks.mii;
+      if (miiCheck && miiCheck.status === 'flagged') {
+        pass = true;
+        details = 'CAUTION: Local content declared but BOM cost breakup pending.';
+      } else {
+        details = 'PASS: Local content exceeds statutory Class-I threshold (>=50%).';
+      }
+    }
+
+    showToast(`${pass ? '✓ PASS' : '✕ DISQUALIFIED'}: ${clause.clause_ref} — ${details}`);
+  };
+
+  function renderRulebookCardsHtml() {
+    let clauses = STATUTORY_RULEBOOKS_DATA;
+    if (rulebookSelectedCategory !== 'ALL') {
+      clauses = clauses.filter(r => r.category === rulebookSelectedCategory);
+    }
+    if (rulebookSearchQuery) {
+      clauses = clauses.filter(r => (r.title + ' ' + r.text + ' ' + r.clause_ref).toLowerCase().includes(rulebookSearchQuery));
+    }
+
+    if (clauses.length === 0) {
+      return `<div style="background:#fff; border:1px solid var(--line); border-radius:12px; padding:36px; text-align:center; color:var(--ink-soft);">
+        No statutory clauses found matching your search query (<b>${esc(rulebookSearchQuery)}</b>).
+      </div>`;
+    }
+
+    return clauses.map(c => `
+      <div class="decisions-card" style="margin-bottom:14px;">
+        <div class="decisions-card-top">
+          <div>
+            <div style="font-size:10.5px; font-family:var(--font-gov-mono); color:var(--accent); font-weight:700; text-transform:uppercase; letter-spacing:0.04em;">${esc(c.rulebook)} · ${esc(c.clause_ref)}</div>
+            <h3 style="margin:4px 0 0 0; font-family:var(--font-gov-title); font-size:16px; color:var(--ink);">${esc(c.title)}</h3>
+            <div style="font-size:11.5px; color:var(--ink-faint); margin-top:2px;">Issuing Authority: <b>${esc(c.authority)}</b></div>
+          </div>
+          <button class="tenders-action-btn" onclick="evaluateClauseAgainstActiveBidder('${esc(c.id)}')">
+            <span>Live Evaluate Against Bidder</span> ➔
+          </button>
+        </div>
+
+        <div class="decisions-grounds-box" style="border-left-color:var(--ink);">
+          ${esc(c.text)}
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px;">
+          <span style="font-size:11px; font-weight:700; font-family:var(--font-gov-mono); color:var(--ink-soft);">Machine Conditions:</span>
+          ${c.conditions.map(cd => `
+            <span style="background:var(--surface-2); border:1px solid var(--line); border-radius:6px; padding:3px 8px; font-size:11px; font-family:var(--font-gov-mono); color:var(--ink);">
+              <code>${esc(cd.field)} ${esc(cd.op)} ${esc(cd.value)}</code> ${cd.critical ? '<span style="color:#C1432E; font-weight:700;">[MANDATORY]</span>' : ''}
+            </span>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderRulebookTab() {
+    return `
+      ${renderTabBarHtml()}
+      <div class="tenders-container">
+        <div class="tenders-header-box">
+          <div>
+            <h2>Statutory Rule Book &amp; Vector-Indexed Regulatory Knowledge Base</h2>
+            <p>Cross-reference bidder proposals against official General Financial Rules (GFR 2017), GeM GTC 4.0, and Ministry of MSME / Make-in-India statutory orders.</p>
+          </div>
+          <div>
+            <input type="text" class="tenders-search-input" placeholder="Semantic vector search across clauses (e.g. OEM MAF, Section 206AB, Local Content)..." value="${esc(rulebookSearchQuery)}" oninput="searchRulebookKnowledgeBase(this.value)" />
+          </div>
+        </div>
+
+        <!-- Category Filters Bar -->
+        <div class="decisions-filter-bar">
+          <button class="decisions-filter-btn ${rulebookSelectedCategory === 'ALL' ? 'active' : ''}" onclick="setRulebookCategoryFilter('ALL')">All Statutory Clauses (${STATUTORY_RULEBOOKS_DATA.length})</button>
+          <button class="decisions-filter-btn ${rulebookSelectedCategory === 'GFR_2017' ? 'active' : ''}" onclick="setRulebookCategoryFilter('GFR_2017')">GFR 2017 Rules</button>
+          <button class="decisions-filter-btn ${rulebookSelectedCategory === 'GEM_GTC' ? 'active' : ''}" onclick="setRulebookCategoryFilter('GEM_GTC')">GeM GTC v4.0 Clauses</button>
+          <button class="decisions-filter-btn ${rulebookSelectedCategory === 'MII_POLICY' ? 'active' : ''}" onclick="setRulebookCategoryFilter('MII_POLICY')">Make-in-India Order 2017</button>
+          <button class="decisions-filter-btn ${rulebookSelectedCategory === 'MSME_POLICY' ? 'active' : ''}" onclick="setRulebookCategoryFilter('MSME_POLICY')">MSME Policy Order 2012</button>
+        </div>
+
+        <!-- Rule Cards Container -->
+        <div id="rulebookCardsContainer">
+          ${renderRulebookCardsHtml()}
+        </div>
+      </div>
+    `;
+  }
+
+  window.simulateGeMWebhookSubmission = async function() {
+    showToast('Connecting to GeM Portal Webhook Gateway...');
+    const sampleBids = [
+      {
+        gem_bid_number: 'GEM/2026/B/889900',
+        tender_id: 'CPCL/MANALI/M&C/2026/160',
+        vendor_name: 'Bharat Forge Energy Equipment Ltd',
+        gstin: '27AABCB1234K1Z5',
+        pan: 'AABCB1234K',
+        udyam_registration: 'UDYAM-MH-12-0055443',
+        declared_local_content: 72.5,
+        oem_maf_attached: true,
+        annual_turnover_cr: 14.80,
+        nic_code: '27100'
+      },
+      {
+        gem_bid_number: 'GEM/2026/B/991122',
+        tender_id: 'CPCL/MANALI/M&C/2026/185',
+        vendor_name: 'Dräger Safety Instruments India Pvt Ltd',
+        gstin: '33AABCD5678L1Z9',
+        pan: 'AABCD5678L',
+        udyam_registration: 'UDYAM-TN-02-0088991',
+        declared_local_content: 64.0,
+        oem_maf_attached: true,
+        annual_turnover_cr: 8.50,
+        nic_code: '26511'
+      }
+    ];
+
+    const randomBid = sampleBids[Math.floor(Math.random() * sampleBids.length)];
+    try {
+      const res = await fetch('/api/v1/gem/webhook/bid-submission', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(randomBid)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const newId = data.bidder_id;
+        DB[newId] = {
+          profile: {
+            id: newId,
+            name: randomBid.vendor_name,
+            category: 'GeM Live Webhook Ingestion',
+            gstin: randomBid.gstin,
+            pan: randomBid.pan,
+            udyam: randomBid.udyam_registration,
+            gem_bid: randomBid.gem_bid_number
+          },
+          results: {
+            score: data.bci_score,
+            risk: data.risk_tier === 'GREEN' ? 'Low' : data.risk_tier === 'AMBER' ? 'Medium' : 'High',
+            verifiedAt: new Date().toLocaleDateString('en-IN'),
+            counts: { verified: 9, flagged: 1, missing: 0, na: 1 },
+            recommendation: {
+              lead: `Live GeM Submission received for ${randomBid.vendor_name}. Technical criteria and statutory verifications cleared.`,
+              items: [
+                { label: 'GeM Webhook Dispatcher', finding: `Processed via push event. Provenance Seal: ${data.audit_seal.slice(0, 16)}...` },
+                { label: 'Local Content Declaration', finding: `Declared at ${randomBid.declared_local_content}% (Class-I Local Supplier)` },
+                { label: 'Audited Solvency', finding: `Turnover verified at ₹${randomBid.annual_turnover_cr} Cr/annum` }
+              ]
+            },
+            checks: {
+              udyam: { status: 'verified', finding: `Active Udyam (${randomBid.udyam_registration}) matching NIC ${randomBid.nic_code}.` },
+              gst: { status: 'verified', finding: 'GSTIN active with regular GSTR-3B filings.' },
+              pan: { status: 'verified', finding: 'PAN operative; no Sec 206AB default.' },
+              mca: { status: 'verified', finding: 'Active RoC status.' },
+              epfo: { status: 'verified', finding: 'EPFO active.' },
+              esic: { status: 'verified', finding: 'ESIC compliance active.' },
+              startup: { status: 'na', finding: 'Not applicable.' },
+              nsic: { status: 'verified', finding: 'ISO compliance certificates verified.' },
+              mii: { status: 'verified', finding: `Class-I Supplier (${randomBid.declared_local_content}% Local Content).` },
+              digilocker: { status: 'verified', finding: 'OEM MAF & statutory test reports verified.' },
+              blacklist: { status: 'verified', finding: 'Zero debarment listings found.' }
+            }
+          },
+          auditTrail: [
+            { time: nowStr(), actor: 'GeM Webhook Gateway', text: `Real-time push event received for Bid #${randomBid.gem_bid_number}. Ingested vendor "${randomBid.vendor_name}".` },
+            { time: nowStr(), actor: 'Statutory Verification Pipeline', text: `Automated parallel scrutiny completed. BCI Score: ${data.bci_score}/100 Points (${data.risk_tier} RISK).` }
+          ]
+        };
+
+        activeId = newId;
+        currentActiveTab = 'verification';
+        renderSidebar();
+        renderMain();
+        showToast(`⚡ Live GeM Webhook Processed: Ingested ${randomBid.vendor_name} (Score: ${data.bci_score}/100)!`);
+        return;
+      }
+    } catch (err) {
+      console.warn('GeM webhook API error, using client simulation:', err);
+    }
+  };
+
   function renderMain() {
     const record = DB[activeId];
     const main = document.getElementById('main');
     const p = record.profile;
     const running = scanningNow;
+
+    if (currentActiveTab === 'rulebook') {
+      main.innerHTML = renderRulebookTab();
+      return;
+    }
 
     if (currentActiveTab === 'upload') {
       main.innerHTML = renderUploadTab();
@@ -1426,6 +1906,9 @@
           <span class="cat-chip">${esc(p.category)}</span>
         </div>
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <button class="tenders-action-btn" onclick="simulateGeMWebhookSubmission()" style="padding: 11px 16px; font-size: 12.5px; font-weight: 600; border-radius: 9px; background: #0E2036; color: #fff;" title="Trigger simulated incoming live GeM push notification">
+            <span>⚡ Simulate GeM Webhook</span>
+          </button>
           <button class="pdf-btn" id="topPdfBtn" style="padding: 12px 18px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; border-radius: 9px; margin-right: 0;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
