@@ -536,7 +536,7 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
           </svg>
-          <span>Audit Ledger &amp; Provenance</span>
+          <span>Logs</span>
         </button>
       </div>
     `;
@@ -1046,10 +1046,10 @@
       <div class="tenders-container">
         <div class="tenders-header-box">
           <div>
-            <h2>Cryptographic Audit Ledger &amp; Verification Provenance</h2>
-            <p>Immutable SHA-256 digital audit trail recording all statutory adapter queries, Document AI extractions, and officer decisions.</p>
+            <h2>Logs</h2>
+            <p>Immutable digital audit trail recording all statutory adapter queries, Document AI extractions, and officer decisions.</p>
           </div>
-          <button class="tenders-outline-btn" onclick="downloadMasterDossierPDF()">Export Audit Dossier (PDF) ⤓</button>
+          <button class="tenders-outline-btn" onclick="downloadMasterDossierPDF()">Export Logs (PDF) ⤓</button>
         </div>
 
         <div class="audit-block" style="margin-top:0;">
@@ -1566,7 +1566,7 @@
     html += `
       <div class="audit-card">
         <div class="audit-head" id="auditHead">
-          <div class="audit-head-l"><span class="audit-title">Audit trail &amp; Cryptographic Ledger</span><span class="audit-count">${record.auditTrail.length}</span></div>
+          <div class="audit-head-l"><span class="audit-title">Logs</span><span class="audit-count">${record.auditTrail.length}</span></div>
           <div style="display:flex;align-items:center;gap:8px;">
             <button class="pdf-btn" id="pdfDossierBtn" style="font-size: 11.5px; padding: 6px 12px;">Export Official PDF Dossier</button>
             <span class="audit-toggle" id="auditToggleLabel">Show ▾</span>
