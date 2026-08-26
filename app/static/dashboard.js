@@ -427,7 +427,7 @@
   function checkCardHtml(c, st) {
     const status = st ? st.status : 'pending';
     const finding = st ? st.finding : 'Awaiting verification run. Click card to view document inspection parameters.';
-    return `<div class="check-card" data-check="${c.id}">
+    return `<div class="check-card" data-check="${c.id}" onclick="openDocInspector('${c.id}')" style="cursor:pointer;">
       <div class="check-top">
         <div>
           <div class="check-label">${c.label}</div>
@@ -1666,11 +1666,14 @@
   function closeDocInspector() {
     if (docModalBackdrop) docModalBackdrop.classList.remove('open');
   }
+  window.closeDocInspector = closeDocInspector;
 
   window.copyModalSha = function() {
-    const shaText = document.getElementById('docModalSha').textContent;
-    navigator.clipboard.writeText(shaText);
-    showToast('SHA-256 Digital Seal copied to clipboard.');
+    const shaEl = document.getElementById('docModalSha');
+    if (shaEl) {
+      navigator.clipboard.writeText(shaEl.textContent);
+      showToast('Copied to clipboard.');
+    }
   };
 
   let currentInspectedCheckId = 'udyam';
@@ -1678,6 +1681,7 @@
   function openDocInspector(checkId) {
     currentInspectedCheckId = checkId;
     const record = DB[activeId];
+    if (!record) return;
     const p = record.profile;
     const chkConfig = CHECKS.find(c => c.id === checkId) || CHECKS[0];
     const checkResult = (record.results && record.results.checks[checkId]) || {
@@ -1685,42 +1689,56 @@
       finding: `Record verified against ${chkConfig.portal}. No discrepancies identified.`
     };
 
-    document.getElementById('docModalPortal').textContent = chkConfig.portal;
-    document.getElementById('docModalTitle').textContent = chkConfig.label;
+    const portalEl = document.getElementById('docModalPortal');
+    if (portalEl) portalEl.textContent = chkConfig.portal;
+
+    const titleEl = document.getElementById('docModalTitle');
+    if (titleEl) titleEl.textContent = chkConfig.label;
 
     const statusEl = document.getElementById('docModalStatus');
-    statusEl.className = 'status-tag ' + checkResult.status;
-    statusEl.textContent = STATUS_LABEL[checkResult.status];
+    if (statusEl) {
+      statusEl.className = 'status-tag ' + checkResult.status;
+      statusEl.textContent = STATUS_LABEL[checkResult.status] || checkResult.status.toUpperCase();
+    }
 
-    document.getElementById('docModalFinding').textContent = checkResult.finding;
+    const findingEl = document.getElementById('docModalFinding');
+    if (findingEl) findingEl.textContent = checkResult.finding;
 
     // Build specific structured fields based on checkId
     const fieldsEl = document.getElementById('docModalFields');
-    const rawFields = getExtractedFieldsRaw(checkId, p, checkResult);
-    fieldsEl.innerHTML = rawFields.map(f => `
-      <div class="doc-field-card">
-        <div class="doc-field-lbl">${esc(f.lbl)}</div>
-        <div class="doc-field-val">${esc(f.val)}</div>
-      </div>
-    `).join('');
+    if (fieldsEl) {
+      const rawFields = getExtractedFieldsRaw(checkId, p, checkResult);
+      fieldsEl.innerHTML = rawFields.map(f => `
+        <div class="doc-field-card">
+          <div class="doc-field-lbl">${esc(f.lbl)}</div>
+          <div class="doc-field-val">${esc(f.val)}</div>
+        </div>
+      `).join('');
+    }
 
     // Build statutory rule validations
     const rulesEl = document.getElementById('docModalRules');
-    const rawRules = getRuleValidationsRaw(checkId, p, checkResult);
-    rulesEl.innerHTML = rawRules.map(r => `
-      <div class="doc-rule-item">
-        <span class="doc-rule-icon ${r.fail ? 'fail' : r.warn ? 'warn' : 'pass'}">${r.fail ? '✕' : r.warn ? '⚠' : '✓'}</span>
-        <span>${esc(r.text)}</span>
-      </div>
-    `).join('');
+    if (rulesEl) {
+      const rawRules = getRuleValidationsRaw(checkId, p, checkResult);
+      rulesEl.innerHTML = rawRules.map(r => `
+        <div class="doc-rule-item">
+          <span class="doc-rule-icon ${r.fail ? 'fail' : r.warn ? 'warn' : 'pass'}">${r.fail ? '✕' : r.warn ? '⚠' : '✓'}</span>
+          <span>${esc(r.text)}</span>
+        </div>
+      `).join('');
+    }
 
-    // Generate canonical SHA-256 hash
-    const seed = p.gstin + p.pan + checkId + (checkResult.finding || '');
-    const sha = generateSyntheticSha256(seed);
-    document.getElementById('docModalSha').textContent = sha;
+    const shaEl = document.getElementById('docModalSha');
+    if (shaEl) {
+      const seed = p.gstin + p.pan + checkId + (checkResult.finding || '');
+      shaEl.textContent = generateSyntheticSha256(seed);
+    }
 
-    if (docModalBackdrop) docModalBackdrop.classList.add('open');
+    if (docModalBackdrop) {
+      docModalBackdrop.classList.add('open');
+    }
   }
+  window.openDocInspector = openDocInspector;
 
   function generateSyntheticSha256(seed) {
     let hash = '';
