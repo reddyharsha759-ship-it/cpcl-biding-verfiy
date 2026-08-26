@@ -1279,12 +1279,7 @@
           <b>Statutory Rule Assessment:</b> ${esc(doc.ruleCitation)}
         </div>
 
-        <div style="background:var(--surface-2); padding:10px 14px; border-radius:8px; margin-bottom:16px; font-family:var(--font-gov-mono); font-size:11px; color:var(--ink-faint); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-          <div><b>SHA-256 Digest:</b> <span style="color:var(--ink);">${esc(doc.sha256)}</span></div>
-          <button class="doc-copy-btn" onclick="navigator.clipboard.writeText('${esc(doc.sha256)}'); showToast('Copied SHA-256 seal!');">Copy Seal</button>
-        </div>
-
-        <div style="display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;">
+        <div style="display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; margin-top:16px;">
           <button class="tenders-outline-btn" onclick="applyUploadedDocToActiveBidder()">
             <span>Apply to Active Bidder Evaluation</span> ➔
           </button>
