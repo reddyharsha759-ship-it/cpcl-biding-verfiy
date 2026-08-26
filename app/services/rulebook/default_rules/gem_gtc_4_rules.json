@@ -1,0 +1,74 @@
+{
+  "id": "GEM_GTC_4",
+  "title": "Government e-Marketplace General Terms & Conditions (GTC) v4.0",
+  "authority": "GeM Special Purpose Vehicle (SPV), Ministry of Commerce and Industry",
+  "version": "GTC-4.0-Rev-2024",
+  "category": "e-Procurement Platform Terms",
+  "summary": "Mandatory contractual conditions and qualification criteria for all sellers, service providers, and buyers transacting on the GeM portal.",
+  "effective_date": "2023-11-01",
+  "clauses": [
+    {
+      "id": "GEM_GTC_C4_1",
+      "rulebook_id": "GEM_GTC_4",
+      "rulebook_title": "GeM General Terms & Conditions (GTC) v4.0",
+      "clause_number": "Clause 4.1",
+      "title": "Mandatory GST Compliance & Regular Return Filing",
+      "category": "Taxation & GST",
+      "legal_text": "All sellers registered on GeM must maintain an Active GSTIN status and demonstrate regular filing of GSTR-3B and GSTR-1 returns. Sellers with irregular tax filing status or suspended registrations shall be disqualified from technical evaluation.",
+      "severity": "DISQUALIFYING",
+      "keywords": ["gstin", "gstr-3b", "gstr-1", "tax compliance", "gst return filing regularity", "clause 4.1"],
+      "conditions": [
+        {
+          "field_path": "gst_status",
+          "operator": "EQUALS",
+          "expected_value": "ACTIVE",
+          "failure_message": "Violation of GeM GTC Clause 4.1: GSTIN status is not Active (Suspended or Cancelled)."
+        },
+        {
+          "field_path": "gst_filing_regularity_pct",
+          "operator": "GREATER_THAN_EQUAL",
+          "expected_value": 75.0,
+          "failure_message": "Violation of GeM GTC Clause 4.1: GST return filing regularity is below 75% threshold in the last 12 months."
+        }
+      ]
+    },
+    {
+      "id": "GEM_GTC_C4_8",
+      "rulebook_id": "GEM_GTC_4",
+      "rulebook_title": "GeM General Terms & Conditions (GTC) v4.0",
+      "clause_number": "Clause 4.8",
+      "title": "OEM Authorization & MAF Specificity Mandate",
+      "category": "Technical Qualification",
+      "legal_text": "In bids requiring Original Equipment Manufacturer (OEM) authorization, the reseller/bidder must upload an unexpired Manufacturer Authorization Form (MAF) explicitly naming the Buyer Organization, Tender Reference Number, and GeM Bid Number.",
+      "severity": "MANDATORY",
+      "keywords": ["oem authorization", "maf", "manufacturer certificate", "reseller authorization", "clause 4.8"],
+      "conditions": [
+        {
+          "field_path": "maf_valid",
+          "operator": "EQUALS",
+          "expected_value": true,
+          "failure_message": "Violation of GeM GTC Clause 4.8: OEM Manufacturer Authorization Form is missing, expired, or references an invalid tender/bid number."
+        }
+      ]
+    },
+    {
+      "id": "GEM_GTC_C4_14",
+      "rulebook_id": "GEM_GTC_4",
+      "rulebook_title": "GeM General Terms & Conditions (GTC) v4.0",
+      "clause_number": "Clause 4.14",
+      "title": "Income Tax Section 206AB Compliance",
+      "category": "Taxation & PAN",
+      "legal_text": "Bidders must not be non-filers of income tax returns as defined under Section 206AB of the Income Tax Act, 1961. Verified PAN records must be linked with Aadhaar and in operative standing.",
+      "severity": "MANDATORY",
+      "keywords": ["section 206ab", "pan compliance", "tds higher rate", "itr non filer", "clause 4.14"],
+      "conditions": [
+        {
+          "field_path": "is_sec_206ab_defaulter",
+          "operator": "EQUALS",
+          "expected_value": false,
+          "failure_message": "Violation of GeM GTC Clause 4.14: Specified as non-filer under Section 206AB of Income Tax Act."
+        }
+      ]
+    }
+  ]
+}

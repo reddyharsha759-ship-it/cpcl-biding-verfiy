@@ -1,0 +1,87 @@
+{
+  "id": "GFR_2017",
+  "title": "General Financial Rules (GFR) 2017",
+  "authority": "Ministry of Finance, Department of Expenditure, Government of India",
+  "version": "GFR-2017-Updated-2024",
+  "category": "Public Financial Management & Procurement",
+  "summary": "Statutory framework governing all public procurement of goods, works, and consulting services by Central Government Ministries, Departments, and attached CPSEs.",
+  "effective_date": "2017-04-01",
+  "clauses": [
+    {
+      "id": "GFR_2017_R144",
+      "rulebook_id": "GFR_2017",
+      "rulebook_title": "General Financial Rules (GFR) 2017",
+      "clause_number": "Rule 144(xi)",
+      "title": "Restrictions on Procurement from Land Border Sharing Countries",
+      "category": "National Security & Eligibility",
+      "legal_text": "Any bidder from a country which shares a land border with India will be eligible to bid in any procurement whether of goods, services or works only if the bidder is registered with the Competent Authority (DPIIT Registration Committee). Beneficial ownership compliance is mandatory.",
+      "severity": "DISQUALIFYING",
+      "keywords": ["land border", "china", "pakistan", "dpiit registration", "beneficial ownership", "rule 144"],
+      "conditions": [
+        {
+          "field_path": "land_border_compliance",
+          "operator": "EQUALS",
+          "expected_value": true,
+          "failure_message": "Bidder fails Rule 144(xi) of GFR 2017: Non-compliant land border sharing entity without valid DPIIT registration certificate."
+        }
+      ]
+    },
+    {
+      "id": "GFR_2017_R149",
+      "rulebook_id": "GFR_2017",
+      "rulebook_title": "General Financial Rules (GFR) 2017",
+      "clause_number": "Rule 149",
+      "title": "Mandatory Procurement through Government e-Marketplace (GeM)",
+      "category": "Procurement Platform",
+      "legal_text": "Procurement of common use Goods and Services available on GeM is mandatory for Ministries/Departments and Central Public Sector Enterprises (CPSEs). All statutory credentials including GSTIN, PAN, and Udyam must be authenticated via API against official databases.",
+      "severity": "MANDATORY",
+      "keywords": ["gem mandatory", "common use goods", "direct purchase", "bidding", "rule 149"],
+      "conditions": [
+        {
+          "field_path": "pan_status",
+          "operator": "EQUALS",
+          "expected_value": "OPERATIVE",
+          "failure_message": "Violation of Rule 149: Bidder PAN is inoperative or invalid in Income Tax e-filing database."
+        }
+      ]
+    },
+    {
+      "id": "GFR_2017_R151",
+      "rulebook_id": "GFR_2017",
+      "rulebook_title": "General Financial Rules (GFR) 2017",
+      "clause_number": "Rule 151",
+      "title": "Debarment from Bidding (Blacklisting)",
+      "category": "Blacklisting & Integrity",
+      "legal_text": "A bidder shall be debarred if he has been convicted of an offence under the Prevention of Corruption Act, 1988 or the Indian Penal Code. Debarment by any Central Ministry/Department or CPSE operates across all Central Government entities for the specified debarment period.",
+      "severity": "DISQUALIFYING",
+      "keywords": ["debarment", "blacklisting", "corruption act", "cppp debarment", "banning of business", "rule 151"],
+      "conditions": [
+        {
+          "field_path": "is_debarred",
+          "operator": "EQUALS",
+          "expected_value": false,
+          "failure_message": "Statutory Disqualification under Rule 151 of GFR 2017: Active debarment order found in Central CPPP / GeM Registry."
+        }
+      ]
+    },
+    {
+      "id": "GFR_2017_R153",
+      "rulebook_id": "GFR_2017",
+      "rulebook_title": "General Financial Rules (GFR) 2017",
+      "clause_number": "Rule 153",
+      "title": "Mandatory Public Procurement Policy for Micro and Small Enterprises (MSEs)",
+      "category": "MSME",
+      "legal_text": "The Central Government may mandate reservations and purchase preference for Micro and Small Enterprises registered under the Udyam portal. Eligible MSEs shall be exempted from payment of earnest money deposit (EMD) and tender fees.",
+      "severity": "ADVISORY",
+      "keywords": ["msme preference", "udyam registration", "emd exemption", "rule 153", "purchase preference"],
+      "conditions": [
+        {
+          "field_path": "udyam_valid",
+          "operator": "EQUALS",
+          "expected_value": true,
+          "failure_message": "Advisory under Rule 153: Udyam MSME certificate is unverified or expired; MSE purchase preference will not be applied."
+        }
+      ]
+    }
+  ]
+}

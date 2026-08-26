@@ -1,0 +1,68 @@
+{
+  "id": "MII_PPP_2017",
+  "title": "Public Procurement (Preference to Make in India) Order 2017",
+  "authority": "Department for Promotion of Industry and Internal Trade (DPIIT), Ministry of Commerce & Industry",
+  "version": "DPIIT-P-45021/2/2017-PP-BE-II",
+  "category": "Make in India & Local Content",
+  "summary": "Mandates purchase preference and eligibility thresholds for Class-I and Class-II local suppliers in public procurement by all Central Government Ministries, Departments, Autonomous Bodies, and CPSEs.",
+  "effective_date": "2020-09-16",
+  "clauses": [
+    {
+      "id": "MII_PPP_CLASS1",
+      "rulebook_id": "MII_PPP_2017",
+      "rulebook_title": "Public Procurement (Preference to Make in India) Order 2017",
+      "clause_number": "Para 3(a)",
+      "title": "Class-I Local Supplier Minimum Content Threshold",
+      "category": "Make in India",
+      "legal_text": "'Class-I local supplier' means a supplier or service provider whose goods, services or works offered for procurement meets the minimum local content of 50%. Only Class-I local suppliers are eligible for purchase preference in CPCL tenders.",
+      "severity": "MANDATORY",
+      "keywords": ["class-i local supplier", "50% local content", "purchase preference", "make in india", "para 3a"],
+      "conditions": [
+        {
+          "field_path": "local_content_pct",
+          "operator": "GREATER_THAN_EQUAL",
+          "expected_value": 50.0,
+          "failure_message": "Violation of MII Order Para 3(a): Declared local content is below 50.0% Class-I threshold."
+        }
+      ]
+    },
+    {
+      "id": "MII_PPP_UDIN",
+      "rulebook_id": "MII_PPP_2017",
+      "rulebook_title": "Public Procurement (Preference to Make in India) Order 2017",
+      "clause_number": "Para 9(b)",
+      "title": "Chartered Accountant UDIN Certification Mandate",
+      "category": "Audit & Certification",
+      "legal_text": "For tenders exceeding ₹10 Crore in estimated value, the local content declaration shall be certified by the statutory auditor or a practicing Chartered Accountant possessing a valid Unique Document Identification Number (UDIN) issued by ICAI.",
+      "severity": "MANDATORY",
+      "keywords": ["ca certificate", "icai udin", "statutory auditor", "para 9b", "10 crore threshold"],
+      "conditions": [
+        {
+          "field_path": "ca_udin_valid",
+          "operator": "EQUALS",
+          "expected_value": true,
+          "failure_message": "Violation of MII Order Para 9(b): Chartered Accountant UDIN certificate is unverified or missing for high-value procurement package."
+        }
+      ]
+    },
+    {
+      "id": "MII_PPP_FALSE_DEC",
+      "rulebook_id": "MII_PPP_2017",
+      "rulebook_title": "Public Procurement (Preference to Make in India) Order 2017",
+      "clause_number": "Para 9(f)",
+      "title": "Penalties for False Declarations of Local Content",
+      "category": "Debarment & Penalties",
+      "legal_text": "False declarations of local content percentage or location of value addition will be in breach of the Code of Integrity under Rule 175(1)(i)(h) of GFR 2017, for which a bidder or its successors can be debarred for up to two years.",
+      "severity": "DISQUALIFYING",
+      "keywords": ["false declaration", "local content penalty", "rule 175", "debarment 2 years", "para 9f"],
+      "conditions": [
+        {
+          "field_path": "false_declaration_flag",
+          "operator": "EQUALS",
+          "expected_value": false,
+          "failure_message": "Statutory Action under MII Order Para 9(f): Adverse finding of false local content declaration."
+        }
+      ]
+    }
+  ]
+}
