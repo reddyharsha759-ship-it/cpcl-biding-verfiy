@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPCL GeM TrustShield AI | Single Sign-On Portal</title>
+    <!-- Government of India & PSU Typography Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Merriweather:wght@400;700;900&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans"', '"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+                        condensed: ['"IBM Plex Sans Condensed"', '"Noto Sans"', 'sans-serif'],
+                        mono: ['"IBM Plex Mono"', 'monospace'],
+                        serif: ['"Noto Serif"', '"Merriweather"', 'Georgia', 'serif'],
+                        gov: ['"Cinzel"', '"Noto Serif"', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#F8FAFC] text-slate-900 font-sans min-h-screen antialiased flex flex-col justify-between selection:bg-black selection:text-white">
+
+    <!-- Header / Branding Bar -->
+    <header class="border-b border-slate-200 bg-white py-4 px-6 sm:px-12 flex items-center justify-between z-10 shadow-sm">
+        <div class="flex items-center space-x-3.5">
+            <div class="w-10 h-10 rounded-xl bg-black flex items-center justify-center shadow-md font-bold text-white text-sm font-mono tracking-tighter">
+                CPCL
+            </div>
+            <div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-base font-bold tracking-tight text-black font-serif">Chennai Petroleum Corporation Limited (CPCL)</span>
+                    <span class="px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-black text-white rounded font-mono">IndianOil Group</span>
+                </div>
+                <p class="text-[11px] text-slate-600 font-medium">Materials &amp; Contracts Dept • Manali Refinery • Statutory GeM Bid Scrutiny Portal</p>
+            </div>
+        </div>
+
+        <div class="hidden sm:flex items-center space-x-2 text-xs font-mono text-slate-700">
+            <span class="w-2 h-2 rounded-full bg-black animate-pulse"></span>
+            <span>CPCL Gateway Online • SHA-256 Enabled</span>
+        </div>
+    </header>
+
+    <!-- Main Auth Card Container -->
+    <main class="flex-1 flex items-center justify-center p-4 sm:p-8 z-10">
+        <div class="w-full max-w-xl rounded-2xl p-8 sm:p-10 bg-white border border-slate-200 shadow-xl space-y-6">
+            
+            <!-- Badge & Title -->
+            <div class="text-center space-y-2">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-black border border-slate-300 font-mono">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <span>Official Single Sign-On (SSO)</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-black font-serif tracking-tight">Authorized Officer Access</h1>
+                <p class="text-xs sm:text-sm text-slate-600 font-medium">Select your designated role or choose Other User to enter</p>
+            </div>
+
+            <!-- Role Selector Tabs Grid (4 Roles) -->
+            <div class="space-y-2">
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 font-mono">Select Designated Role</label>
+                <div class="grid grid-cols-2 gap-2.5">
+                    
+                    <!-- Role 1: Procurement Officer -->
+                    <button type="button" id="roleOfficerBtn" onclick="selectRole('officer')" class="role-btn p-3 rounded-xl bg-black border-2 border-black text-left transition flex items-start space-x-2.5 text-white shadow-sm">
+                        <div class="p-1.5 rounded-lg bg-white/20 text-white mt-0.5">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-bold text-white">Procurement Officer</span>
+                            <span class="text-[10px] text-slate-300 font-medium">Evaluation &amp; Sign-off</span>
+                        </div>
+                    </button>
+
+                    <!-- Role 2: System Administrator -->
+                    <button type="button" id="roleAdminBtn" onclick="selectRole('admin')" class="role-btn p-3 rounded-xl bg-slate-50 border border-slate-300 text-left transition flex items-start space-x-2.5 text-slate-800 hover:border-black">
+                        <div class="p-1.5 rounded-lg bg-slate-200 text-slate-700 mt-0.5">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-bold text-slate-900">System Admin</span>
+                            <span class="text-[10px] text-slate-500 font-medium">Rules &amp; Gateways</span>
+                        </div>
+                    </button>
+
+                    <!-- Role 3: Vigilance & Audit Officer -->
+                    <button type="button" id="roleAuditBtn" onclick="selectRole('audit')" class="role-btn p-3 rounded-xl bg-slate-50 border border-slate-300 text-left transition flex items-start space-x-2.5 text-slate-800 hover:border-black">
+                        <div class="p-1.5 rounded-lg bg-slate-200 text-slate-700 mt-0.5">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-bold text-slate-900">Vigilance &amp; Audit</span>
+                            <span class="text-[10px] text-slate-500 font-medium">Oversight &amp; Probity</span>
+                        </div>
+                    </button>
+
+                    <!-- Role 4: Other / Custom User -->
+                    <button type="button" id="roleOtherBtn" onclick="selectRole('other')" class="role-btn p-3 rounded-xl bg-slate-50 border border-slate-300 text-left transition flex items-start space-x-2.5 text-slate-800 hover:border-black">
+                        <div class="p-1.5 rounded-lg bg-slate-200 text-slate-700 mt-0.5">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-bold text-slate-900">Other User</span>
+                            <span class="text-[10px] text-slate-500 font-medium">Custom Officer ID</span>
+                        </div>
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 text-xs">
+                
+                <!-- Dynamic Other User Fields (Visible when 'other' is selected) -->
+                <div id="otherUserFields" class="hidden p-3.5 rounded-xl bg-slate-50 border border-slate-300 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-800">Custom Officer Profile Details</span>
+                        <span class="text-[10px] text-slate-500 font-mono">Custom Sign-in</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-slate-600 font-bold mb-1">Full Name &amp; Title</label>
+                            <input id="otherNameInput" type="text" value="Shri R. Annamalai (GM - Refinery Operations)" placeholder="e.g. Shri R. Annamalai (GM)" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 font-medium outline-none focus:border-black">
+                        </div>
+                        <div>
+                            <label class="block text-slate-600 font-bold mb-1">Designation / Role</label>
+                            <input id="otherDesignationInput" type="text" value="General Manager (Refinery Operations)" placeholder="e.g. Technical Member" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 font-medium outline-none focus:border-black">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-700 font-bold mb-1.5">CPCL Official Email / Parichay ID</label>
+                    <div class="relative">
+                        <input id="emailInput" type="email" required value="procurement.officer@cpcl.co.in" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-900 font-medium outline-none focus:border-black focus:ring-1 focus:ring-black transition pl-10 font-mono">
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label class="text-slate-700 font-bold">CPCL Security PIN / Password</label>
+                        <span class="text-[10px] text-slate-600 font-semibold cursor-pointer hover:underline">Reset PIN</span>
+                    </div>
+                    <div class="relative">
+                        <input id="passwordInput" type="password" required value="CPCL@Refinery#2026" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-900 font-mono font-medium outline-none focus:border-black focus:ring-1 focus:ring-black transition pl-10">
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Remember Me & Security Notice -->
+                <div class="flex items-center justify-between pt-1">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked class="rounded border-slate-300 text-black focus:ring-black">
+                        <span class="text-[11px] text-slate-600 font-medium">Keep session active</span>
+                    </label>
+                    <span class="text-[10px] font-mono text-slate-700 font-semibold">256-bit TLS Encrypted</span>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn" class="w-full py-3.5 rounded-xl bg-black hover:bg-slate-800 text-white font-bold text-sm tracking-wide shadow-md transition transform active:scale-[0.99] flex items-center justify-center space-x-2">
+                    <span id="btnText">Enter CPCL Scrutiny Dashboard</span>
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Quick Demo Credentials Box -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 space-y-1">
+                <div class="flex items-center justify-between text-slate-900 font-bold">
+                    <span>⚡ CPCL Authorized Credentials</span>
+                    <span class="text-[10px] text-black uppercase font-mono font-bold">1-Click Auth</span>
+                </div>
+                <div class="flex items-center justify-between text-slate-500">
+                    <span>Select any role or configure Other User to authenticate session.</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 bg-white py-4 px-6 text-center text-xs text-slate-500 font-medium z-10">
+        Chennai Petroleum Corporation Limited (CPCL) • A Group Company of IndianOil • Manali Refinery, Chennai - 600068
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3.5 rounded-xl border text-xs font-semibold shadow-2xl transition duration-300 transform translate-y-20 opacity-0 z-50 flex items-center space-x-2.5">
+        <span id="toastIcon"></span>
+        <span id="toastMsg"></span>
+    </div>
+
+    <script>
+        let selectedRole = "officer";
+
+        const ROLES_CONFIG = {
+            officer: {
+                name: "Smt. Lakshmi Narayanan (DGM - Contracts)",
+                email: "procurement.officer@cpcl.co.in",
+                title: "Procurement Officer",
+                designation: "Deputy General Manager (Materials & Contracts)",
+                dept: "CPCL Manali Refinery, Chennai",
+            },
+            admin: {
+                name: "Shri M. Senthil Kumar (Chief Manager - IT)",
+                email: "admin.trustshield@cpcl.co.in",
+                title: "System Administrator",
+                designation: "Chief Manager (Information Systems & Security)",
+                dept: "CPCL Head Office, Chennai",
+            },
+            audit: {
+                name: "Shri K. Rangarajan (Chief Vigilance Officer)",
+                email: "vigilance.audit@cpcl.co.in",
+                title: "Vigilance & Audit Officer",
+                designation: "Chief Vigilance Officer (CVO)",
+                dept: "CPCL Vigilance & Internal Audit Directorate",
+            },
+            other: {
+                name: "Shri R. Annamalai (GM - Operations)",
+                email: "guest.evaluator@cpcl.co.in",
+                title: "Evaluation Committee Member",
+                designation: "General Manager (Refinery Operations)",
+                dept: "CPCL Technical Evaluation Committee",
+            }
+        };
+
+        const roleButtonIds = {
+            officer: "roleOfficerBtn",
+            admin: "roleAdminBtn",
+            audit: "roleAuditBtn",
+            other: "roleOtherBtn"
+        };
+
+        function selectRole(role) {
+            selectedRole = role;
+            const emailInput = document.getElementById("emailInput");
+            const otherFields = document.getElementById("otherUserFields");
+
+            // Toggle active styling on all 4 buttons
+            Object.keys(roleButtonIds).forEach(r => {
+                const btn = document.getElementById(roleButtonIds[r]);
+                if (!btn) return;
+                const iconContainer = btn.querySelector("div");
+                const textTitle = btn.querySelector("span.block");
+                const textSub = btn.querySelectorAll("span")[1];
+
+                if (r === role) {
+                    btn.className = "role-btn p-3 rounded-xl bg-black border-2 border-black text-left transition flex items-start space-x-2.5 text-white shadow-sm";
+                    if (iconContainer) iconContainer.className = "p-1.5 rounded-lg bg-white/20 text-white mt-0.5";
+                    if (textTitle) textTitle.className = "block text-xs font-bold text-white";
+                    if (textSub) textSub.className = "text-[10px] text-slate-300 font-medium";
+                } else {
+                    btn.className = "role-btn p-3 rounded-xl bg-slate-50 border border-slate-300 text-left transition flex items-start space-x-2.5 text-slate-800 hover:border-black";
+                    if (iconContainer) iconContainer.className = "p-1.5 rounded-lg bg-slate-200 text-slate-700 mt-0.5";
+                    if (textTitle) textTitle.className = "block text-xs font-bold text-slate-900";
+                    if (textSub) textSub.className = "text-[10px] text-slate-500 font-medium";
+                }
+            });
+
+            if (role === "other") {
+                if (otherFields) otherFields.classList.remove("hidden");
+                emailInput.value = ROLES_CONFIG.other.email;
+            } else {
+                if (otherFields) otherFields.classList.add("hidden");
+                emailInput.value = ROLES_CONFIG[role].email;
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            let roleData = ROLES_CONFIG[selectedRole] || ROLES_CONFIG.officer;
+            
+            if (selectedRole === "other") {
+                const customName = document.getElementById("otherNameInput").value.trim() || roleData.name;
+                const customDesig = document.getElementById("otherDesignationInput").value.trim() || roleData.designation;
+                const customEmail = document.getElementById("emailInput").value.trim() || roleData.email;
+                roleData = {
+                    name: customName,
+                    email: customEmail,
+                    title: "Other User",
+                    designation: customDesig,
+                    dept: "CPCL Evaluator / Guest Directorate"
+                };
+            }
+
+            // Store session
+            localStorage.setItem("gem_user_role", selectedRole);
+            localStorage.setItem("gem_user_name", roleData.name);
+            localStorage.setItem("gem_user_email", roleData.email);
+            localStorage.setItem("gem_user_designation", roleData.designation);
+            localStorage.setItem("gem_user_dept", roleData.dept);
+
+            showToast(`Welcome, ${roleData.name}! Authenticating session...`, "success");
+
+            const btnText = document.getElementById("btnText");
+            btnText.textContent = "Verifying Credentials...";
+
+            setTimeout(() => {
+                window.location.href = "/dashboard";
+            }, 600);
+        }
+
+        function showToast(msg, type = "info") {
+            const toast = document.getElementById("toast");
+            const toastMsg = document.getElementById("toastMsg");
+            const toastIcon = document.getElementById("toastIcon");
+            if (!toast || !toastMsg) return;
+
+            toastMsg.textContent = msg;
+            if (toastIcon) {
+                toastIcon.textContent = type === "error" ? "✕" : type === "success" ? "✓" : "ℹ";
+            }
+
+            toast.className = `fixed bottom-6 right-6 px-5 py-3.5 rounded-xl border text-xs font-semibold shadow-2xl transition duration-300 transform translate-y-0 opacity-100 z-50 flex items-center space-x-2.5 ${
+                type === "error" ? "bg-black border-red-500 text-red-400" :
+                type === "success" ? "bg-black border-emerald-500 text-emerald-400" :
+                "bg-black border-slate-700 text-white"
+            }`;
+        }
+    </script>
+</body>
+</html>
