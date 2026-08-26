@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "app/static/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/docs",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/openapi.json",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/login",
+      "dest": "/app/static/login.html"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/app/static/dashboard.html"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/app/static/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/app/static/login.html"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "sqlite+aiosqlite:///./gem_compliance.db",
+    "PYTHON_VERSION": "3.11"
+  }
+}
