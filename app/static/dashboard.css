@@ -33,13 +33,17 @@
 }
 
 * { box-sizing: border-box; }
-html, body { height: 100%; }
+html {
+  font-size: 1em;
+  height: 100%;
+}
 body {
+  height: 100%;
   margin: 0;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-gov-sans);
-  font-size: 14px;
+  font-size: 1em;
   line-height: 1.5;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
