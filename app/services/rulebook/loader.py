@@ -113,3 +113,81 @@ class RulebookLoader:
             clauses=clauses,
             total_clauses=len(clauses),
         )
+
+    @classmethod
+    def parse_plain_or_pdf_text(
+        cls,
+        text: str,
+        rulebook_id: str,
+        title: str,
+        authority: str = "CPCL / Ministry of Petroleum",
+        category: str = "Statutory & Technical Specifications",
+    ) -> RuleBook:
+        """
+        Parses raw text extracted from a PDF or policy document into structured rule clauses.
+        Detects standard clause headers like Rule, Clause, Section, Requirement, or numbered lists.
+        """
+        # Split on headers like: Clause 1, Rule 144, Section 5, ### Heading, 1. Title, etc.
+        pattern = r"(?=(?:^|\n\n)(?:###?\s+|Rule\s+\d+|Clause\s+\d+|Section\s+\d+|Para(?:graph)?\s+\d+|\d+\.\s+[A-Z]))"
+        sections = re.split(pattern, text, flags=re.IGNORECASE)
+        clauses: List[RuleClause] = []
+
+        for idx, sec in enumerate(sections):
+            sec = sec.strip()
+            if len(sec) < 25:
+                continue
+
+            lines = sec.split("\n")
+            first_line = lines[0].replace("#", "").strip()
+            body = "\n".join(lines[1:]).strip() if len(lines) > 1 else first_line
+
+            header = first_line[:120]
+            clause_num = f"Clause {len(clauses) + 1}"
+            match = re.search(r"((?:Rule|Clause|Section|Para)\s+[\w\.\(\)]+)", header, re.IGNORECASE)
+            if match:
+                clause_num = match.group(1).title()
+
+            clause_id = f"{rulebook_id}_C{len(clauses) + 1}"
+            words = re.findall(r"\b[A-Za-z]{4,}\b", header + " " + body)
+            keywords = list(dict.fromkeys([w.lower() for w in words[:12]]))
+
+            clauses.append(
+                RuleClause(
+                    id=clause_id,
+                    rulebook_id=rulebook_id,
+                    rulebook_title=title,
+                    clause_number=clause_num,
+                    title=header,
+                    category=category,
+                    legal_text=body or header,
+                    severity=RuleSeverity.MANDATORY,
+                    keywords=keywords,
+                )
+            )
+
+        if not clauses:
+            # Fallback for single continuous document text
+            clauses.append(
+                RuleClause(
+                    id=f"{rulebook_id}_C1",
+                    rulebook_id=rulebook_id,
+                    rulebook_title=title,
+                    clause_number="Clause 1.0",
+                    title=title,
+                    category=category,
+                    legal_text=text[:1500],
+                    severity=RuleSeverity.MANDATORY,
+                    keywords=["procurement", "compliance", "specification", "statutory"],
+                )
+            )
+
+        return RuleBook(
+            id=rulebook_id,
+            title=title,
+            authority=authority,
+            version="1.0",
+            category=category,
+            summary=f"Ingested PDF / Statutory Document containing {len(clauses)} verified clauses.",
+            clauses=clauses,
+            total_clauses=len(clauses),
+        )

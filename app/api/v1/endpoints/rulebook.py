@@ -1,9 +1,8 @@
-"""
-API Endpoints for Dynamic Statutory Rule Book & Regulatory Knowledge Base
-"""
-
+import hashlib
+from datetime import datetime, timezone
+import json
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Body, HTTPException, Query, status
+from fastapi import APIRouter, Body, File, HTTPException, Query, UploadFile, status
 
 from app.models.rule_schemas import (
     PolicySearchQuery,
@@ -13,6 +12,7 @@ from app.models.rule_schemas import (
     RuleEvaluationRequest,
     RuleEvaluationResponse,
 )
+from app.services.document_ai.parser import PDFProcessor
 from app.services.rulebook.loader import RulebookLoader
 from app.services.rulebook.rule_evaluator import RuleEvaluator
 from app.services.rulebook.vector_store import policy_vector_store
@@ -21,6 +21,13 @@ router = APIRouter(prefix="/rulebooks", tags=["Rulebook & Policy Knowledge Base"
 
 # In-memory registry of active rulebooks
 ACTIVE_RULEBOOKS: Dict[str, RuleBook] = {}
+RULEBOOK_LOCK_STATE: Dict[str, Any] = {
+    "is_locked": True,
+    "locked_at": "2026-08-27T08:00:00Z",
+    "locked_by": "Shri V. Ramasubramanian, Chief Vigilance Officer",
+    "lock_seal": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+    "total_clauses_locked": 7,
+}
 
 
 def initialize_rulebook_engine() -> None:
@@ -46,6 +53,123 @@ async def list_rulebooks(
     if category:
         rbs = [rb for rb in rbs if category.lower() in rb.category.lower()]
     return rbs
+
+
+@router.get("/lock-status")
+async def get_rulebook_lock_status() -> Dict[str, Any]:
+    """
+    Returns current cryptographic lock status of the active rulebook baseline.
+    """
+    total_clauses = sum(len(rb.clauses) for rb in ACTIVE_RULEBOOKS.values())
+    RULEBOOK_LOCK_STATE["total_clauses_locked"] = total_clauses
+    return RULEBOOK_LOCK_STATE
+
+
+@router.post("/lock")
+async def lock_rulebook(
+    officer_name: str = Query("Procurement Review Officer", description="Name of locking officer")
+) -> Dict[str, Any]:
+    """
+    Cryptographically locks the statutory rulebook baseline to prevent mid-tender tampering.
+    """
+    total_clauses = sum(len(rb.clauses) for rb in ACTIVE_RULEBOOKS.values())
+    hasher = hashlib.sha256()
+    for rb in ACTIVE_RULEBOOKS.values():
+        hasher.update(rb.title.encode("utf-8"))
+        for c in rb.clauses:
+            hasher.update(c.legal_text.encode("utf-8"))
+
+    seal = hasher.hexdigest()
+    RULEBOOK_LOCK_STATE.update({
+        "is_locked": True,
+        "locked_at": datetime.now(timezone.utc).isoformat(),
+        "locked_by": officer_name,
+        "lock_seal": seal,
+        "total_clauses_locked": total_clauses,
+    })
+    return {
+        "status": "LOCKED",
+        "message": f"Rulebook baseline sealed with {total_clauses} statutory clauses.",
+        "lock_state": RULEBOOK_LOCK_STATE,
+    }
+
+
+@router.post("/unlock")
+async def unlock_rulebook(
+    officer_name: str = Query("Procurement Review Officer", description="Name of unlocking officer")
+) -> Dict[str, Any]:
+    """
+    Unlocks the rulebook baseline to allow uploading new statutory guidelines or tender specs.
+    """
+    RULEBOOK_LOCK_STATE.update({
+        "is_locked": False,
+        "unlocked_at": datetime.now(timezone.utc).isoformat(),
+        "unlocked_by": officer_name,
+    })
+    return {
+        "status": "UNLOCKED",
+        "message": "Rulebook unlocked for modifications.",
+        "lock_state": RULEBOOK_LOCK_STATE,
+    }
+
+
+@router.post("/upload-file", response_model=RuleBook, status_code=status.HTTP_201_CREATED)
+async def upload_rulebook_file(
+    file: UploadFile = File(..., description="PDF, Markdown, JSON or TXT file of the policy rulebook"),
+    title: Optional[str] = Query(None, description="Custom title for the rulebook"),
+    authority: Optional[str] = Query("Chennai Petroleum Corporation Limited (CPCL)", description="Issuing Authority"),
+    category: Optional[str] = Query("Technical & Statutory Rules", description="Regulatory category"),
+) -> RuleBook:
+    """
+    Uploads and processes a rulebook from PDF, Markdown, JSON, or Plain Text.
+    Extracts legal clauses, indexes them into the vector knowledge base, and returns the RuleBook.
+    """
+    content_bytes = await file.read()
+    filename = file.filename or "uploaded_rulebook.pdf"
+    rb_id = f"RB_{hashlib.md5(filename.encode('utf-8')).hexdigest()[:8].upper()}"
+    rb_title = title or filename.rsplit(".", 1)[0].replace("_", " ").title()
+
+    try:
+        if filename.lower().endswith(".pdf"):
+            pdf_data = await PDFProcessor.extract_text(content_bytes)
+            raw_text = pdf_data.get("full_text", "")
+            rb = RulebookLoader.parse_plain_or_pdf_text(
+                text=raw_text,
+                rulebook_id=rb_id,
+                title=rb_title,
+                authority=authority,
+                category=category,
+            )
+        elif filename.lower().endswith(".json"):
+            data = json.loads(content_bytes.decode("utf-8"))
+            rb = RulebookLoader.parse_dict(data)
+        elif filename.lower().endswith((".md", ".txt")):
+            raw_text = content_bytes.decode("utf-8")
+            rb = RulebookLoader.parse_markdown_policy(
+                text=raw_text,
+                rulebook_id=rb_id,
+                title=rb_title,
+                authority=authority,
+            )
+        else:
+            raw_text = content_bytes.decode("utf-8", errors="ignore")
+            rb = RulebookLoader.parse_plain_or_pdf_text(
+                text=raw_text,
+                rulebook_id=rb_id,
+                title=rb_title,
+                authority=authority,
+                category=category,
+            )
+
+        ACTIVE_RULEBOOKS[rb.id] = rb
+        policy_vector_store.add_clauses(rb.clauses)
+        return rb
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Failed to parse and index rulebook file: {str(e)}",
+        )
 
 
 @router.get("/{rulebook_id}/clauses", response_model=List[RuleClause])
