@@ -21,13 +21,6 @@ router = APIRouter(prefix="/rulebooks", tags=["Rulebook & Policy Knowledge Base"
 
 # In-memory registry of active rulebooks
 ACTIVE_RULEBOOKS: Dict[str, RuleBook] = {}
-RULEBOOK_LOCK_STATE: Dict[str, Any] = {
-    "is_locked": True,
-    "locked_at": "2026-08-27T08:00:00Z",
-    "locked_by": "Shri V. Ramasubramanian, Chief Vigilance Officer",
-    "lock_seal": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
-    "total_clauses_locked": 7,
-}
 
 
 def initialize_rulebook_engine() -> None:
@@ -53,64 +46,6 @@ async def list_rulebooks(
     if category:
         rbs = [rb for rb in rbs if category.lower() in rb.category.lower()]
     return rbs
-
-
-@router.get("/lock-status")
-async def get_rulebook_lock_status() -> Dict[str, Any]:
-    """
-    Returns current cryptographic lock status of the active rulebook baseline.
-    """
-    total_clauses = sum(len(rb.clauses) for rb in ACTIVE_RULEBOOKS.values())
-    RULEBOOK_LOCK_STATE["total_clauses_locked"] = total_clauses
-    return RULEBOOK_LOCK_STATE
-
-
-@router.post("/lock")
-async def lock_rulebook(
-    officer_name: str = Query("Procurement Review Officer", description="Name of locking officer")
-) -> Dict[str, Any]:
-    """
-    Cryptographically locks the statutory rulebook baseline to prevent mid-tender tampering.
-    """
-    total_clauses = sum(len(rb.clauses) for rb in ACTIVE_RULEBOOKS.values())
-    hasher = hashlib.sha256()
-    for rb in ACTIVE_RULEBOOKS.values():
-        hasher.update(rb.title.encode("utf-8"))
-        for c in rb.clauses:
-            hasher.update(c.legal_text.encode("utf-8"))
-
-    seal = hasher.hexdigest()
-    RULEBOOK_LOCK_STATE.update({
-        "is_locked": True,
-        "locked_at": datetime.now(timezone.utc).isoformat(),
-        "locked_by": officer_name,
-        "lock_seal": seal,
-        "total_clauses_locked": total_clauses,
-    })
-    return {
-        "status": "LOCKED",
-        "message": f"Rulebook baseline sealed with {total_clauses} statutory clauses.",
-        "lock_state": RULEBOOK_LOCK_STATE,
-    }
-
-
-@router.post("/unlock")
-async def unlock_rulebook(
-    officer_name: str = Query("Procurement Review Officer", description="Name of unlocking officer")
-) -> Dict[str, Any]:
-    """
-    Unlocks the rulebook baseline to allow uploading new statutory guidelines or tender specs.
-    """
-    RULEBOOK_LOCK_STATE.update({
-        "is_locked": False,
-        "unlocked_at": datetime.now(timezone.utc).isoformat(),
-        "unlocked_by": officer_name,
-    })
-    return {
-        "status": "UNLOCKED",
-        "message": "Rulebook unlocked for modifications.",
-        "lock_state": RULEBOOK_LOCK_STATE,
-    }
 
 
 @router.post("/upload-file", response_model=RuleBook, status_code=status.HTTP_201_CREATED)

@@ -1769,35 +1769,6 @@
     `).join('');
   }
 
-  let rulebookLockState = {
-    is_locked: true,
-    locked_by: 'Shri V. Ramasubramanian, Chief Vigilance Officer',
-    locked_at: '27-Aug-2026 08:30 IST',
-    lock_seal: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08'
-  };
-
-  window.toggleRulebookLockState = async function() {
-    try {
-      const endpoint = rulebookLockState.is_locked ? '/api/v1/rulebooks/unlock' : '/api/v1/rulebooks/lock';
-      const res = await fetch(endpoint, { method: 'POST' });
-      if (res.ok) {
-        const data = await res.json();
-        rulebookLockState.is_locked = data.lock_state.is_locked;
-        rulebookLockState.locked_at = new Date().toLocaleString('en-IN');
-        rulebookLockState.lock_seal = data.lock_state.lock_seal || rulebookLockState.lock_seal;
-        renderMain();
-        showToast(`Rulebook Baseline ${rulebookLockState.is_locked ? '🔒 LOCKED & SEALED' : '🔓 UNLOCKED for modifications'}`);
-        return;
-      }
-    } catch (e) {
-      console.warn('Backend lock endpoint fallback to local state:', e);
-    }
-    rulebookLockState.is_locked = !rulebookLockState.is_locked;
-    rulebookLockState.locked_at = new Date().toLocaleString('en-IN');
-    renderMain();
-    showToast(`Rulebook Baseline ${rulebookLockState.is_locked ? '🔒 LOCKED & SEALED' : '🔓 UNLOCKED for modifications'}`);
-  };
-
   window.triggerRulebookFileInput = function() {
     const input = document.getElementById('rulebookFileInput');
     if (input) input.click();
@@ -1937,29 +1908,11 @@
         <div class="tenders-header-box">
           <div>
             <h2>Statutory Rule Book &amp; Regulatory Policy Knowledge Base</h2>
-            <p>Upload new procurement guidelines, lock baseline rule sets, and cross-reference bidder proposals against GFR 2017, GeM GTC 4.0, and CPCL Special Conditions.</p>
+            <p>Upload new procurement guidelines, search statutory clauses, and cross-reference bidder proposals against GFR 2017, GeM GTC 4.0, and CPCL Special Conditions.</p>
           </div>
           <div>
             <input type="text" class="tenders-search-input" placeholder="Semantic vector search across clauses (e.g. OEM MAF, Section 206AB, Local Content)..." value="${esc(rulebookSearchQuery)}" oninput="searchRulebookKnowledgeBase(this.value)" />
           </div>
-        </div>
-
-        <!-- Rulebook Baseline Lock Banner (Part 1 of Procurement Flow) -->
-        <div style="background:#fff; border:1px solid ${rulebookLockState.is_locked ? '#0D9488' : '#F59E0B'}; border-radius:10px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
-          <div style="display:flex; align-items:center; gap:12px;">
-            <span style="font-size:22px;">${rulebookLockState.is_locked ? '🔒' : '🔓'}</span>
-            <div>
-              <div style="font-weight:700; font-family:var(--font-gov-title); font-size:14px; color:var(--ink);">
-                Rulebook Baseline Status: <span style="color:${rulebookLockState.is_locked ? '#0D9488' : '#D97706'};">${rulebookLockState.is_locked ? 'LOCKED & SEALED (Active for Tender Scrutiny)' : 'UNLOCKED (Editing Mode)'}</span>
-              </div>
-              <div style="font-size:11.5px; color:var(--ink-soft); font-family:var(--font-gov-mono); margin-top:2px;">
-                ${rulebookLockState.is_locked ? `Locked by: ${esc(rulebookLockState.locked_by)} • ${esc(rulebookLockState.locked_at)} • SHA-256: ${esc(rulebookLockState.lock_seal.slice(0, 16))}...` : 'Rulebook is editable. Upload new PDF/Markdown policy documents or modify statutory criteria below.'}
-              </div>
-            </div>
-          </div>
-          <button class="tenders-action-btn" onclick="toggleRulebookLockState()" style="background:${rulebookLockState.is_locked ? '#0E2036' : '#0D9488'}; color:#fff; padding:8px 14px; font-size:12px; border-radius:7px;">
-            <span>${rulebookLockState.is_locked ? '🔓 Unlock to Modify Baseline' : '🔒 Lock & Seal Rulebook Baseline'}</span>
-          </button>
         </div>
 
         <!-- Rulebook Upload Dropzone Box -->

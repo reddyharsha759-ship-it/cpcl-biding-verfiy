@@ -231,19 +231,7 @@ async def test_rulebook_api_endpoints():
         assert eval_res["overall_compliant"] is True
         assert eval_res["passed_clauses_count"] >= 8
 
-        # 5. Lock and Unlock Endpoints
-        r_lock_status = await client.get("/api/v1/rulebooks/lock-status")
-        assert r_lock_status.status_code == 200
-
-        r_lock = await client.post("/api/v1/rulebooks/lock?officer_name=CVO_Test")
-        assert r_lock.status_code == 200
-        assert r_lock.json()["status"] == "LOCKED"
-
-        r_unlock = await client.post("/api/v1/rulebooks/unlock?officer_name=CVO_Test")
-        assert r_unlock.status_code == 200
-        assert r_unlock.json()["status"] == "UNLOCKED"
-
-        # 6. File Upload Endpoint (Markdown / Text)
+        # 5. File Upload Endpoint (Markdown / Text)
         sample_policy = b"### Rule 1: High Pressure Valve Safety\nAll valves must be certified to ANSI 600# rating.\n\n### Rule 2: Explosion Proof Enclosure\nAll terminal boxes must meet IP68 & PESO approvals."
         files = {"file": ("cpcl_custom_policy.md", sample_policy, "text/markdown")}
         r_upload_file = await client.post("/api/v1/rulebooks/upload-file", files=files)
