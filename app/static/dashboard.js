@@ -1125,6 +1125,43 @@
     generateClientSideSpecsPDF(tender);
   };
 
+  function showToast(msg) {
+    let toast = document.getElementById('globalToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'globalToast';
+      toast.style.position = 'fixed';
+      toast.style.bottom = '24px';
+      toast.style.right = '24px';
+      toast.style.zIndex = '999999';
+      toast.style.background = '#0E2036';
+      toast.style.color = '#FFFFFF';
+      toast.style.padding = '12px 20px';
+      toast.style.borderRadius = '8px';
+      toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.3)';
+      toast.style.fontFamily = 'var(--font-gov-title)';
+      toast.style.fontSize = '13.5px';
+      toast.style.fontWeight = '600';
+      toast.style.display = 'none';
+      toast.style.alignItems = 'center';
+      toast.style.gap = '10px';
+      toast.style.border = '1px solid rgba(255,255,255,0.2)';
+      toast.style.transition = 'all 0.3s ease';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = `<span style="font-size:16px;">⚡</span> <span>${esc(msg)}</span>`;
+    toast.style.display = 'flex';
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+    if (toast._timer) clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(10px)';
+      setTimeout(() => { toast.style.display = 'none'; }, 300);
+    }, 4000);
+  }
+  window.showToast = showToast;
+
   function renderTendersTab() {
     return `
       ${renderTabBarHtml()}
@@ -1143,15 +1180,15 @@
         <div class="tender-grid" style="padding:0; border:none;">
           <div class="tender-stat-card" style="background:#fff;">
             <div class="lbl">Total Active Tenders</div>
-            <div class="val">5 Refinery Packages</div>
+            <div class="val">8 Refinery Packages</div>
           </div>
           <div class="tender-stat-card" style="background:#fff;">
             <div class="lbl">Total Cumulative Value</div>
-            <div class="val">₹ 25.85 Crore (INR)</div>
+            <div class="val">₹ 96.05 Crore (INR)</div>
           </div>
           <div class="tender-stat-card" style="background:#fff;">
             <div class="lbl">Ingested Bid Packages</div>
-            <div class="val">14 Vendor Submissions</div>
+            <div class="val">20 Vendor Submissions</div>
           </div>
           <div class="tender-stat-card" style="background:#fff;">
             <div class="lbl">Procuring Authority</div>
@@ -1600,11 +1637,16 @@
     }
   ];
 
+  function updateRulebookCardsView() {
+    const container = document.getElementById('rulebookCardsContainer');
+    if (container) container.innerHTML = renderRulebookCardsHtml();
+  }
+
   window.searchRulebookKnowledgeBase = async function(query) {
     rulebookSearchQuery = (query || '').toLowerCase().trim();
     if (!rulebookSearchQuery) {
       rulebookSearchResults = null;
-      renderRulebookCards();
+      updateRulebookCardsView();
       return;
     }
 
@@ -1617,7 +1659,7 @@
       if (res.ok) {
         const data = await res.json();
         rulebookSearchResults = data.matches;
-        renderRulebookCards();
+        updateRulebookCardsView();
         return;
       }
     } catch (e) {
@@ -1638,13 +1680,12 @@
       match_type: 'semantic'
     }));
 
-    renderRulebookCards();
+    updateRulebookCardsView();
   };
 
   window.setRulebookCategoryFilter = function(cat) {
     rulebookSelectedCategory = cat;
-    const container = document.getElementById('rulebookCardsContainer');
-    if (container) container.innerHTML = renderRulebookCardsHtml();
+    updateRulebookCardsView();
   };
 
   window.evaluateClauseAgainstActiveBidder = function(clauseId) {
